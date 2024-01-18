@@ -1,12 +1,11 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class Bottondialog extends StatelessWidget {
   final String text;
   VoidCallback onPressed;
-  Bottondialog({
-    super.key, 
-    required this.text,
-    required this.onPressed});
+  Bottondialog({super.key, required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

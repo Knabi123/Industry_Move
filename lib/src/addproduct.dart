@@ -2,9 +2,7 @@ import 'package:company/utils/add_product.dart';
 import 'package:company/utils/dialog_product.dart';
 import 'package:flutter/material.dart';
 
-List add_product=[
-  
-];
+List add_product = [];
 
 final _controllerproduct = TextEditingController();
 
@@ -43,25 +41,23 @@ class _AddproductState extends State<Addproduct> {
         title: Text('Add Product'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:()=> createNewProduct(context),
+        onPressed: () => createNewProduct(context),
         child: Icon(Icons.add),
-        ),
+      ),
       body: ListView.builder(
-itemCount: add_product.length,
-itemBuilder: (context, index){
-  return Add_product(
-    Productname: add_product[index][0],
-    Id_product: add_product[index][0],
-    Price_product: add_product[index][0],
-    Weight_product: add_product[index][0],
-    Size_product: add_product[index][0],
-    Detail_product: add_product[index][0],
-    Unit_product: add_product[index][0],
-  );
-},
+        itemCount: add_product.length,
+        itemBuilder: (context, index) {
+          return Add_product(
+            Productname: add_product[index][0],
+            Id_product: add_product[index][0],
+            Price_product: add_product[index][0],
+            Weight_product: add_product[index][0],
+            Size_product: add_product[index][0],
+            Detail_product: add_product[index][0],
+            Unit_product: add_product[index][0],
+          );
+        },
       ),
     );
   }
-
-  
 }

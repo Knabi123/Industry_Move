@@ -1,4 +1,8 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:company/src/bottombar.dart';
+import 'package:company/src_user/register.dart';
 // import 'package:newlogin/components/square_tile.dart';
 
 class LoginPage extends StatefulWidget {
@@ -77,25 +81,28 @@ class _LoginPageState extends State<LoginPage> {
               //Login button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                
-                child: 
-                
-                Container(
-                  
-                  padding: EdgeInsets.all(20), //ขนาดกล่องข้อความ
-                  decoration: BoxDecoration(
-                    
+                child: InkWell(
+                  onTap: () {
+                    // Navigate to another page (RegisterPage in this case)
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => BottomBar()),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
                       color: Colors.black87,
-                      borderRadius:
-                          BorderRadius.circular(50) //ความโค้งของกรอบ Login
-                      ),
-                  child: Center(
-                    child: Text(
-                      'Log in',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Log in',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -105,20 +112,28 @@ class _LoginPageState extends State<LoginPage> {
               // Sign up button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  padding: EdgeInsets.all(20), //ขนาดกล่องข้อความ
-                  decoration: BoxDecoration(
+                child: InkWell(
+                  onTap: () {
+                    // Navigate to another page (RegisterPage in this case)
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => RegisterPage()),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
                       color: Colors.grey[400],
-                      borderRadius:
-                          BorderRadius.circular(50) //ความโค้งของกรอบ Login
-                      ),
-                  child: Center(
-                    child: Text(
-                      'Sign up',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Sign up',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
                       ),
                     ),
                   ),

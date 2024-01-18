@@ -1,3 +1,6 @@
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors
+
+import 'package:company/src_user/login.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -84,7 +87,10 @@ class RegisterForm extends StatelessWidget {
               SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -92,7 +98,7 @@ class RegisterForm extends StatelessWidget {
                   ),
                   backgroundColor: Color(0xFF7E7878),
                   padding: EdgeInsets.symmetric(vertical: 20.0),
-                  minimumSize: Size(300, 60), 
+                  minimumSize: Size(300, 60),
                 ),
                 child: Text(
                   'Submit',
