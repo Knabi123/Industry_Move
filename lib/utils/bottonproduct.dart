@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class ButtonProduct extends StatelessWidget {
@@ -7,7 +9,7 @@ class ButtonProduct extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    });
+  });
 
   @override
   Widget build(BuildContext context) {

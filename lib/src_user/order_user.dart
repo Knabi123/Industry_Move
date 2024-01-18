@@ -1,6 +1,10 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, camel_case_types, sort_child_properties_last, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+
+// void main() {
+//   runApp(MaterialApp(home: Order_user()));
+// }
 
 class Order_user extends StatelessWidget {
   final List<String> orderList = ["Order 1", "Order 2", "Order 3", "Order 4"];
@@ -61,26 +65,28 @@ class Order_user extends StatelessWidget {
           );
         },
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.shop),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: const Icon(Icons.description),
-              onPressed: () {},
-            ),
-          ],
-        ),
-        shape: CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        clipBehavior: Clip.antiAlias,
-        elevation: 4.0,
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   color: Colors.white,
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //     children: [
+      //       IconButton(
+      //         icon: const Icon(Icons.shop),
+      //         onPressed: () {
+
+      //         },
+      //       ),
+      //       IconButton(
+      //         icon: const Icon(Icons.description),
+      //         onPressed: () {},
+      //       ),
+      //     ],
+      //   ),
+      //   shape: CircularNotchedRectangle(),
+      //   notchMargin: 8.0,
+      //   clipBehavior: Clip.antiAlias,
+      //   elevation: 4.0,
+      // ),
     );
   }
 }
