@@ -17,7 +17,7 @@ class _BottomBarState extends State<BottomBar> {
   static final List<Widget> _widgetOptions = <Widget>[
     Addproducttype(),
     OrderScreen(),
-    DriverScreen(),
+    DetailDriverPage(),
   ];
   void _onItemTapped(int index) {
     setState(() {
