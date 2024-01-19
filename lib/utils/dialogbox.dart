@@ -17,20 +17,31 @@ class Dialogbox extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       content: Container(
-        height: 120,
-        child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        height: 150,
+        child: Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+              Text(
+        "Type Name",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
+      SizedBox(height: 8),
           TextField(
             controller: controller,
             decoration: InputDecoration(
                 border: OutlineInputBorder(), hintText: "Add New Type"),
           ),
+          SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Bottondialog(text: "Add", onPressed: onSave),
-              const SizedBox(width: 8),
-              Bottondialog(text: "Cancel", onPressed: onCancel)
+              Bottondialog(text: "Cancel", onPressed: onCancel),
+              const SizedBox(width: 100),
+              Bottondialog(text: "Add", onPressed: onSave)
             ],
           )
         ]),

@@ -23,10 +23,10 @@ class AddType extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(24),
           decoration: BoxDecoration(
-            color: Colors.pink,
+            color: Colors.pinkAccent,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Row(
+          child: Column(
             children: [
               //task
               Text(taskname),

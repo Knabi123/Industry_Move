@@ -43,18 +43,29 @@ class _AddproducttypeState extends State<Addproducttype> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
+        centerTitle: true,
         elevation: 0,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => createtype(context),
-        child: Icon(Icons.add),
-      ),
-      body: ListView.builder(
-        itemCount: addtype.length,
-        itemBuilder: (context, index) {
-          return AddType(taskname: addtype[index][0]);
-        },
-      ),
-    );
-  }
+       body: Column(
+      children: [
+        Divider(
+          height: 1, // Specify the height of the divider
+          color: Colors.grey, // Specify the color of the divider
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: addtype.length,
+            itemBuilder: (context, index) {
+              return AddType(taskname: addtype[index][0]);
+            },
+          ),
+        ),
+      ],
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () => createtype(context),
+      child: Icon(Icons.add),
+    ),
+  );
+}
 }
