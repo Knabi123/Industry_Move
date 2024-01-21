@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:company/src_user/order_user.dart';
 import 'package:company/src/addproducttype.dart';
 
-// void main() {
-//   runApp(MaterialApp(home: BottomBar_User()));
-// }
+void main() {
+  runApp(MaterialApp(home: BottomBar_User()));
+}
 
 class BottomBar_User extends StatefulWidget {
   const BottomBar_User({super.key});
