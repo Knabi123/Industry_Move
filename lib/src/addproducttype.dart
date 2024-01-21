@@ -31,8 +31,14 @@ class _AddproducttypeState extends State<Addproducttype> {
       builder: (context) {
         return Dialogbox(
           controller: _controller,
-          onSave: savetype,
-          onCancel: () => Navigator.of(context).pop(),
+          onSave: () {
+            savetype();
+            _controller.text = '';
+          },
+          onCancel: () {
+            _controller.text = '';
+            Navigator.of(context).pop();
+          },
         );
       },
     );

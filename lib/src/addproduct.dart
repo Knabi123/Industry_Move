@@ -28,7 +28,6 @@ class _AddproductState extends State<Addproduct> {
       context: context,
       builder: (context) {
         return Dialogboxproduct(
-          controllerproduct: _controllerproduct,
           onSave: saveNewProduct,
           onCancel: () => Navigator.of(context).pop(),
         );
@@ -51,12 +50,17 @@ class _AddproductState extends State<Addproduct> {
         itemBuilder: (context, index) {
           return Add_product(
             Productname: add_product[index][0],
-            Id_product: add_product[index][0],
-            Price_product: add_product[index][0],
-            Weight_product: add_product[index][0],
-            Size_product: add_product[index][0],
-            Detail_product: add_product[index][0],
-            Unit_product: add_product[index][0],
+            Id_product: 'ID: ${index + 1}', // กำหนด ID ตามลำดับ
+            Price_product:
+                'Price: ${add_product[index][0]}', // ให้ค่าในตำแหน่งนี้เป็นราคา
+            Weight_product:
+                'Weight: ${add_product[index][0]}', // ให้ค่าในตำแหน่งนี้เป็นน้ำหนัก
+            Size_product:
+                'Size: ${add_product[index][0]}', // ให้ค่าในตำแหน่งนี้เป็นขนาด
+            Detail_product:
+                'Detail: ${add_product[index][0]}', // ให้ค่าในตำแหน่งนี้เป็นรายละเอียด
+            Unit_product:
+                'Unit: ${add_product[index][0]}', // ให้ค่าในตำแหน่งนี้เป็นหน่วย
           );
         },
       ),
