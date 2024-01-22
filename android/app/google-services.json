@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "791240127140",
+    "project_id": "industry-move",
+    "storage_bucket": "industry-move.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:791240127140:android:95342de1d2bfb994f3ac31",
+        "android_client_info": {
+          "package_name": "com.example.company"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGkgK-MIt377-W5rFgOIoCab4Jy1Mtp9c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
