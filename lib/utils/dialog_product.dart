@@ -29,63 +29,98 @@ class Dialogboxproduct extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+            Text("Product ID"),
+             
             TextField(
               controller: idController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: "Add ID Product",
+                hintText: "Product ID",
               ),
             ),
+            Text("Product Name"),
             TextField(
               controller: nameController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: "Add Name Product",
+                hintText: "Product Name",
               ),
             ),
-            TextField(
-              controller: priceController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Add Price",
-              ),
+            
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // "Size" and "Weight" on the same line
+                Text("Size"),
+                const SizedBox(width: 5),
+                Expanded(
+                  
+                  child: TextField(
+                    controller: sizeController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Size",
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16), 
+                Text("Weight"),
+                const SizedBox(width: 5),// Adjust the spacing between "Size" and "Weight"
+                Expanded(
+                  child: TextField(
+                    controller: weightController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Weight",
+                    ),
+                  ),
+                ),
+              ],
             ),
-            TextField(
-              controller: weightController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Add Weight",
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // "Unit" and "Price" on the same line
+                Text("Unit"),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: TextField(
+                    controller: unitController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Unit",
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Text("Price"),
+                const SizedBox(width: 5), // Adjust the spacing between "Unit" and "Price"
+                Expanded(
+                  child: TextField(
+                    controller: priceController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: "Price",
+                    ),
+                  ),
+                ),
+              ],
             ),
-            TextField(
-              controller: sizeController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Add Size",
-              ),
-            ),
-            TextField(
-              controller: unitController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Add Unit",
-              ),
-            ),
+            Text("Detail"),
             TextField(
               controller: detailController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: "Add Detail",
-              ),
-            ),
+                hintText: "Detail",
+              ),),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ButtonProduct(text: "Add", onPressed: onSave),
-                const SizedBox(
-                  width: 4,
-                ),
                 ButtonProduct(text: "Cancel", onPressed: onCancel),
+                const SizedBox(
+                  width: 100,
+                ),
+                ButtonProduct(text: "Add", onPressed: onSave),
               ],
             ),
           ],

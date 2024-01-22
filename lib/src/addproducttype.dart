@@ -49,7 +49,9 @@ class _AddproducttypeState extends State<Addproducttype> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Home"),
-        elevation: 0,
+         centerTitle: true, // ตำแหน่งของ title อยู่ตรงกลาง
+        elevation: 2,
+        
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => createtype(context),

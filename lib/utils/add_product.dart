@@ -26,18 +26,36 @@ class Add_product extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10, top: 10),
       child: Container(
-        padding: EdgeInsets.all(50),
-        child: Row(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(Id_product),
+                SizedBox(width: 8),
                 Text(Productname),
-                Text(Price_product),
-                Text(Unit_product),
+              ],
+            ),
+            Text(Detail_product),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
                 Text(Weight_product),
+                SizedBox(width: 8),
                 Text(Size_product),
-                Text(Detail_product),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(Price_product),
+                SizedBox(width: 5),
+                Text("Bath"),
+                SizedBox(width: 10),
+                Text(Unit_product),
               ],
             ),
           ],

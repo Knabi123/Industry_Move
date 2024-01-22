@@ -48,14 +48,16 @@ class _AddproductState extends State<Addproduct> {
       body: ListView.builder(
         itemCount: add_product.length,
         itemBuilder: (context, index) {
-          return Add_product(
+          return Add_product( 
+            Id_product: 'ID : ${index + 1}',
             Productname: add_product[index][0],
-            Id_product: 'ID: ${index + 1}',
-            Price_product: 'Price: ${add_product[index][0]}',
-            Weight_product: 'Weight: ${add_product[index][0]}',
-            Size_product: 'Size: ${add_product[index][0]}',
-            Detail_product: 'Detail: ${add_product[index][0]}',
-            Unit_product: 'Unit: ${add_product[index][0]}',
+            Detail_product: 'Detail : ${add_product[index][0]}',
+            Price_product: 'Price : ${add_product[index][0]}',
+            Unit_product: 'Unit : ${add_product[index][0]}',
+            Weight_product: 'Weight : ${add_product[index][0]}',
+            Size_product: 'Size : ${add_product[index][0]}',
+            
+            
           );
         },
       ),

@@ -21,10 +21,12 @@ class AddType extends StatelessWidget {
           );
         },
         child: Container(
-          padding: EdgeInsets.all(24),
+          padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.pink,
-            borderRadius: BorderRadius.circular(12),
+            
+            color: Color.fromARGB(255, 255, 64, 128),
+            borderRadius: BorderRadius.circular(8),
+            
           ),
           child: Row(
             children: [
