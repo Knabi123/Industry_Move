@@ -1,5 +1,7 @@
 // ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_const_constructors_in_immutables, prefer_const_constructors, sort_child_properties_last
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class Add_product extends StatelessWidget {
@@ -10,6 +12,9 @@ class Add_product extends StatelessWidget {
   final String Weight_product;
   final String Size_product;
   final String Detail_product;
+   final String imageUrl;
+
+
   
   Add_product({
     super.key,
@@ -20,14 +25,18 @@ class Add_product extends StatelessWidget {
     required this.Size_product,
     required this.Unit_product,
     required this.Weight_product,
+    required this.imageUrl,
+   
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10, top: 10),
+      
       child: Container(
         padding: EdgeInsets.all(20),
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,6 +59,7 @@ class Add_product extends StatelessWidget {
               ],
             ),
             Row(
+            
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(Price_product),
@@ -57,12 +67,34 @@ class Add_product extends StatelessWidget {
                 Text("Bath"),
                 SizedBox(width: 10),
                 Text(Unit_product),
+                 if (imageUrl.isNotEmpty) // Display image if available
+              Image.file(File(imageUrl)),
+              ],
+              
+            ),
+         Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    // Handle edit action
+                    // You can open a new dialog or navigate to an edit screen
+                  },
+                ),
+                IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    // Handle delete action
+                    // You can show a confirmation dialog and then delete the item
+                  },
+                ),
               ],
             ),
           ],
         ),
         decoration: BoxDecoration(
-          color: Colors.pink,
+          color: Colors.blueAccent,
           borderRadius: BorderRadius.circular(12),
         ),
       ),

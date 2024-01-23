@@ -13,11 +13,13 @@ class Dialogboxproduct extends StatelessWidget {
   final TextEditingController sizeController = TextEditingController();
   final TextEditingController unitController = TextEditingController();
   final TextEditingController detailController = TextEditingController();
-  final TextEditingController imageUrl = TextEditingController();
+  final TextEditingController imageUrlController = TextEditingController();
   
 
   VoidCallback onSave;
   VoidCallback onCancel;
+
+  
   
 
   Dialogboxproduct({
@@ -26,12 +28,14 @@ class Dialogboxproduct extends StatelessWidget {
     required this.onCancel,
     
   });
-Future<void> _getImage() async {
-  final picker = ImagePicker();
-  final pickedFile = await picker.pickImage(source: ImageSource.gallery); // หรือ source: ImageSource.camera
+ Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-  
-}
+    if (pickedFile != null) {
+      imageUrlController.text = pickedFile.path;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -128,8 +132,8 @@ Future<void> _getImage() async {
               ),
                ElevatedButton(
                 
-            onPressed: _getImage,
-            child: Text("Select Image"),
+            onPressed: _pickImage,
+            child: Text("Select Image Product"),
           ),
               
              

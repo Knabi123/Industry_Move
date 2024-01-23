@@ -34,6 +34,7 @@ class AddType extends StatelessWidget {
               Text(taskname),
             ],
           ),
+          
         ),
       ),
     );

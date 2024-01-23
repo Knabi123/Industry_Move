@@ -56,7 +56,7 @@ class _AddproductState extends State<Addproduct> {
             Unit_product: 'Unit : ${add_product[index][0]}',
             Weight_product: 'Weight : ${add_product[index][0]}',
             Size_product: 'Size : ${add_product[index][0]}',
-            
+            imageUrl: add_product[index][0],
             
           );
         },
