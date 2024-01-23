@@ -2,6 +2,8 @@
 
 import 'package:company/utils/bottonproduct.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class Dialogboxproduct extends StatelessWidget {
   final TextEditingController idController = TextEditingController();
@@ -11,16 +13,25 @@ class Dialogboxproduct extends StatelessWidget {
   final TextEditingController sizeController = TextEditingController();
   final TextEditingController unitController = TextEditingController();
   final TextEditingController detailController = TextEditingController();
+  final TextEditingController imageUrl = TextEditingController();
+  
 
   VoidCallback onSave;
   VoidCallback onCancel;
+  
 
   Dialogboxproduct({
     super.key,
     required this.onSave,
     required this.onCancel,
+    
   });
+Future<void> _getImage() async {
+  final picker = ImagePicker();
+  final pickedFile = await picker.pickImage(source: ImageSource.gallery); // หรือ source: ImageSource.camera
 
+  
+}
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -107,12 +118,21 @@ class Dialogboxproduct extends StatelessWidget {
               ],
             ),
             Text("Detail"),
+            
             TextField(
               controller: detailController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: "Detail",
-              ),),
+              ),
+              ),
+               ElevatedButton(
+                
+            onPressed: _getImage,
+            child: Text("Select Image"),
+          ),
+              
+             
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -128,4 +148,6 @@ class Dialogboxproduct extends StatelessWidget {
       ),
     );
   }
+  
+  
 }

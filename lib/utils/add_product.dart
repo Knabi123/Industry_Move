@@ -10,6 +10,7 @@ class Add_product extends StatelessWidget {
   final String Weight_product;
   final String Size_product;
   final String Detail_product;
+  
   Add_product({
     super.key,
     required this.Productname,
