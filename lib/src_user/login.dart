@@ -21,14 +21,13 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Column(
             children: [
-              SizedBox(height: 25),
-              Text(
-                'Log in',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 50,
-                ),
+              //logo lock
+              const SizedBox(height: 50),
+              Icon(
+                Icons.lock,
+                size: 100, //logo
               ),
+              //ID textfield
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -46,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: TextField(
                       decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintText: 'ID'), //ข้อความในช่อง
+                          hintText: 'Username'), //ข้อความในช่อง
                     ),
                   ),
                 ),
@@ -77,7 +76,17 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: 25),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Forgot Password?',
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
+                ],
+              ),
+              SizedBox(height: 25),
               //Login button
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
@@ -139,7 +148,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 50),
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.center,
               //   children: const [
@@ -153,19 +161,35 @@ class _LoginPageState extends State<LoginPage> {
               // ),
 
               //not a member? register now
-              SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      color: Colors.grey[800],
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              const SizedBox(
+                height: 25,
               ),
+              //or continue with
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Divider(
+                      thickness: 0.5,
+                      color: Colors.grey[400],
+                    )),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        'Or continue with',
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                    ),
+                    Expanded(
+                        child: Divider(
+                      thickness: 0.5,
+                      color: Colors.grey[400],
+                    ))
+                  ],
+                ),
+              )
             ],
           ),
         ),
