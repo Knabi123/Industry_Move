@@ -114,36 +114,43 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  Container(
-                    height: 50,
-                    margin: EdgeInsets.symmetric(horizontal: 200),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.amberAccent),
-                    child: ElevatedButton(
-                      child: Text(
-                        "Login",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      onPressed: () {
+                  Center(
+                    child: InkWell(
+                      onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BottomBar(),
-                            ));
+                                builder: (context) => BottomBar()));
                       },
+                      child: Container(
+                        height: 60,
+                        width: 250,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: Colors.deepPurple,
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Log in',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 20,
                   ),
                   Center(
-                      child: Text(
-                    "Create Account",
-                    style: TextStyle(
-                      color: Color.fromRGBO(49, 39, 79, .6),
+                    child: GestureDetector(
+                      //Text go next page
+                      child: Text('Create Account'),
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                            builder: (BuildContext context) => RegisterForm()));
+                      },
                     ),
-                  )),
+                  ),
                   SizedBox(
                     height: 20,
                   ),

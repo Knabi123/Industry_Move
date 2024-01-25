@@ -93,7 +93,7 @@ class RegisterForm extends StatelessWidget {
                   alignment: Alignment.center,
                   child: TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Phonenumber',
+                      labelText: 'Phone number',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
