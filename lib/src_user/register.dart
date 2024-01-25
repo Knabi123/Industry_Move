@@ -17,7 +17,7 @@ class RegisterForm extends StatelessWidget {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Color(0xFFE5E3DD),
+        color: Colors.blue,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -26,65 +26,85 @@ class RegisterForm extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: Text(
-                  'Signup',
+                  'Sign up',
                   style: TextStyle(
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 40.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
                 ),
               ),
               SizedBox(height: 20.0),
-              Align(
-                alignment: Alignment.center,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'ID',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'ID',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      fillColor: Colors.white,
+                      filled: true,
                     ),
                   ),
                 ),
               ),
               SizedBox(height: 20.0),
-              Align(
-                alignment: Alignment.center,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      fillColor: Colors.white,
+                      filled: true,
                     ),
+                    keyboardType: TextInputType.emailAddress,
+                    obscureText: true,
                   ),
-                  keyboardType: TextInputType.emailAddress,
                 ),
               ),
               SizedBox(height: 20.0),
-              Align(
-                alignment: Alignment.center,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      fillColor: Colors.white,
+                      filled: true,
                     ),
                   ),
-                  obscureText: true,
                 ),
               ),
               SizedBox(height: 20.0),
-              Align(
-                alignment: Alignment.center,
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Phonenumber',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 50),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Phonenumber',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      fillColor: Colors.white,
+                      filled: true,
                     ),
+                    keyboardType: TextInputType.phone,
                   ),
-                  keyboardType: TextInputType.phone,
                 ),
               ),
-              SizedBox(height: 20.0),
+              SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -96,8 +116,10 @@ class RegisterForm extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40.0),
                   ),
-                  backgroundColor: Color(0xFF7E7878),
-                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                  backgroundColor: Colors.greenAccent[400],
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 100,
+                  ),
                   minimumSize: Size(300, 60),
                 ),
                 child: Text(
