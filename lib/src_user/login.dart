@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.purple[100],
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         padding: EdgeInsets.all(5),
                         child: TextField(
+                          obscuringCharacter: '*',
                           obscureText: true,
                           decoration: InputDecoration(
                               border: InputBorder.none,
@@ -109,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                       child: Text(
                     "Forgot Password?",
-                    style: TextStyle(color: Color.fromRGBO(196, 135, 198, 1)),
+                    style: TextStyle(color: Colors.black),
                   )),
                   SizedBox(
                     height: 20,
@@ -127,6 +128,10 @@ class _LoginPageState extends State<LoginPage> {
                         width: 250,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(40),
+                          gradient: LinearGradient(colors: [
+                            Colors.purple,
+                            Colors.indigo,
+                          ]),
                           color: Colors.deepPurple,
                         ),
                         child: Center(
