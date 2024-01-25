@@ -59,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                   Text(
                     "Login",
                     style: TextStyle(
+                        fontFamily: 'Kanit-Black',
                         color: Color.fromRGBO(49, 39, 79, 1),
                         fontWeight: FontWeight.bold,
                         fontSize: 40),
