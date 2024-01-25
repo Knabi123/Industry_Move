@@ -78,7 +78,7 @@ flutter:
   # example:
   fonts:
    - family: Kanit
-   fonts:
+fonts:
    - assets: fonts/Kanit-Black.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
