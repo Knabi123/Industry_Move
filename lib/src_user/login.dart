@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:company/src/bottombar.dart';
@@ -15,183 +15,175 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.grey[300], //สีพื้นหลัง
-      body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              //logo lock
-              const SizedBox(height: 50),
-              Icon(
-                Icons.lock,
-                size: 100, //logo
-              ),
-              //ID textfield
-              SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.white),
-                    borderRadius:
-                        BorderRadius.circular(50), //รูปลักษณ์ช่องกรอกข้อมูล ID
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20.0), // ตำแหน่งข้อความ ID ในช่อง
-                    child: TextField(
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Username'), //ข้อความในช่อง
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              height: 400,
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    top: -40,
+                    height: 400,
+                    width: width + 20,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/background.png'),
+                              fit: BoxFit.fill)),
                     ),
                   ),
-                ),
-              ),
-
-              //password textfield
-              SizedBox(height: 20), //ระยะห่างระหว่าง ID กับ Pw
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.white),
-                    borderRadius:
-                        BorderRadius.circular(50), //รูปลักษณ์ช่องกรอกข้อมูล ID
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20.0), // ตำแหน่งข้อความ Password ในช่อง
-                    child: TextField(
-                      obscureText: true, //ปิดข้อความ pw
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Password' //ข้อความในช่อง
-                          ),
+                  Positioned(
+                    height: 400,
+                    width: width + 20,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage('assets/images/background-2.png'),
+                              fit: BoxFit.fill)),
                     ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 25),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Forgot Password?',
-                    style: TextStyle(color: Colors.grey[700]),
-                  ),
+                  )
                 ],
               ),
-              SizedBox(height: 25),
-              //Login button
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: InkWell(
-                  onTap: () {
-                    // Navigate to another page (RegisterPage in this case)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => BottomBar()),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(20),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "Login",
+                    style: TextStyle(
+                        color: Color.fromRGBO(49, 39, 79, 1),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
                     decoration: BoxDecoration(
-                      color: Colors.black87,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Log in',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(196, 135, 198, .3),
+                            blurRadius: 20,
+                            offset: Offset(0, 5),
+                          )
+                        ]),
+                    child: Column(children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom:
+                                    BorderSide(color: Colors.grey.shade200))),
+                        child: TextField(
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Username", //ข้อความในช่อง
+                              hintStyle: TextStyle(color: Colors.grey)),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20),
-              // Sign up button
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: InkWell(
-                  onTap: () {
-                    // Navigate to another page (RegisterPage in this case)
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
-                    );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[400],
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Sign up',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                      Container(
+                        padding: EdgeInsets.all(5),
+                        child: TextField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Password", //ข้อความในช่อง
+                              hintStyle: TextStyle(color: Colors.grey)),
                         ),
-                      ),
-                    ),
+                      )
+                    ]),
                   ),
-                ),
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: const [
-              //     SquareTile(
-              //         imagePath: 'images/facebook.png'), //facebook button
-              //     SizedBox(
-              //       width: 60,
-              //     ),
-              //     SquareTile(imagePath: 'images/gmail.png') //gmail button
-              //   ],
-              // ),
-
-              //not a member? register now
-              const SizedBox(
-                height: 25,
-              ),
-              //or continue with
-
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Divider(
-                      thickness: 0.5,
-                      color: Colors.grey[400],
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                      child: Text(
+                    "Forgot Password?",
+                    style: TextStyle(color: Color.fromRGBO(196, 135, 198, 1)),
+                  )),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: 50,
+                    margin: EdgeInsets.symmetric(horizontal: 60),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Color.fromRGBO(49, 39, 79, 1)),
+                    child: Center(
+                        child: Text(
+                      "Login",
+                      style: TextStyle(color: Colors.white),
                     )),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Center(
                       child: Text(
-                        'Or continue with',
-                        style: TextStyle(color: Colors.grey[700]),
-                      ),
+                    "Create Account",
+                    style: TextStyle(
+                      color: Color.fromRGBO(49, 39, 79, .6),
                     ),
-                    Expanded(
-                        child: Divider(
-                      thickness: 0.5,
-                      color: Colors.grey[400],
-                    ))
-                  ],
-                ),
-              )
-            ],
-          ),
+                  )),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          padding: EdgeInsets.all(5), //size เหงาของ icon
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white54),
+                          child: Image.asset(
+                            'assets/images/facebook.png',
+                            height: 40,
+                          )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white54),
+                          child: Image.asset(
+                            'assets/images/gmail.png',
+                            height: 40,
+                          )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white54),
+                          child: Image.asset(
+                            'assets/images/instagram.png',
+                            height: 40,
+                          )),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
