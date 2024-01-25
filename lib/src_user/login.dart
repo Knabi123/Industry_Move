@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, unused_import
 
 import 'package:flutter/material.dart';
 import 'package:company/src/bottombar.dart';
@@ -116,15 +116,23 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Container(
                     height: 50,
-                    margin: EdgeInsets.symmetric(horizontal: 60),
+                    margin: EdgeInsets.symmetric(horizontal: 200),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-                        color: Color.fromRGBO(49, 39, 79, 1)),
-                    child: Center(
-                        child: Text(
-                      "Login",
-                      style: TextStyle(color: Colors.white),
-                    )),
+                        color: Colors.amberAccent),
+                    child: ElevatedButton(
+                      child: Text(
+                        "Login",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BottomBar(),
+                            ));
+                      },
+                    ),
                   ),
                   SizedBox(
                     height: 20,
