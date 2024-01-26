@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'order_detail_user.dart';
 
-// void main() {
-//   runApp(MaterialApp(home: Order_user()));
-// }
+void main() {
+  runApp(MaterialApp(home: Order_user()));
+}
 
 class Order_user extends StatelessWidget {
   final List<String> orderList = ["Order 1", "Order 2", "Order 3", "Order 4"];
@@ -51,7 +51,7 @@ class Order_user extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 4.0),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 255, 254, 254),
+                  color: Color.fromARGB(255, 250, 250, 250),
                   borderRadius: BorderRadius.circular(12.0),
                   boxShadow: [
                     BoxShadow(
