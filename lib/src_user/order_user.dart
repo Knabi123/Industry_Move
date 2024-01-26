@@ -51,7 +51,7 @@ class Order_user extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 4.0),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 246, 0, 0),
+                  color: Color.fromARGB(255, 255, 254, 254),
                   borderRadius: BorderRadius.circular(12.0),
                   boxShadow: [
                     BoxShadow(
