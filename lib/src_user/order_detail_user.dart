@@ -91,32 +91,37 @@ class _OrderDetailsPageState extends State<OrderDetailsPage> {
             const SizedBox(height: 18),
 
             const SizedBox(height: 18),
-            const Text(
-              'หลักฐานการชำระเงิน',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 0, 0, 0),
-                fontSize: 18,
+            const Center(
+              child: Text(
+                'หลักฐานการชำระเงิน',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 0, 0, 0),
+                  fontSize: 18,
+                ),
               ),
             ),
             const SizedBox(height: 8),
-            GestureDetector(
-              onTap: _pickImage,
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black),
+            Center(
+              // Center the GestureDetector
+              child: GestureDetector(
+                onTap: _pickImage,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black),
+                  ),
+                  child: _selectedImage != null
+                      ? Image.file(
+                          File(_selectedImage!.path),
+                          fit: BoxFit.cover,
+                        )
+                      : const Icon(
+                          Icons.add_a_photo,
+                          size: 40,
+                        ),
                 ),
-                child: _selectedImage != null
-                    ? Image.file(
-                        File(_selectedImage!.path),
-                        fit: BoxFit.cover,
-                      )
-                    : const Icon(
-                        Icons.add_a_photo,
-                        size: 40,
-                      ),
               ),
             ),
           ],
