@@ -33,8 +33,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Container(
                       decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage(
-                                  'package:company/assets/images/background.png'),
+                              image: AssetImage('images/background.png'),
                               fit: BoxFit.fill)),
                     ),
                   ),
@@ -44,8 +43,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Container(
                       decoration: const BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage(
-                                  'package:company/assets/images/background-2.png'),
+                              image: AssetImage('images/background-2.png'),
                               fit: BoxFit.fill)),
                     ),
                   )
@@ -171,7 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white54),
                           child: Image.asset(
-                            'assets/images/facebook.png',
+                            'images/facebook.png',
                             height: 40,
                           )),
                       SizedBox(
@@ -184,7 +182,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white54),
                           child: Image.asset(
-                            'assets/images/gmail.png',
+                            'images/gmail.png',
                             height: 40,
                           )),
                       SizedBox(
@@ -197,7 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                               borderRadius: BorderRadius.circular(20),
                               color: Colors.white54),
                           child: Image.asset(
-                            'assets/images/instagram.png',
+                            'images/instagram.png',
                             height: 40,
                           )),
                     ],
