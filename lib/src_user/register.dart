@@ -1,7 +1,8 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, use_build_context_synchronously
 
 import 'package:company/src_user/login.dart';
 import 'package:flutter/material.dart';
+import 'package:company/firestore_service.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -11,6 +12,11 @@ class RegisterPage extends StatelessWidget {
 }
 
 class RegisterForm extends StatelessWidget {
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneNumberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +112,14 @@ class RegisterForm extends StatelessWidget {
               ),
               SizedBox(height: 50),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await FirestoreService.addUser(
+                    idController.text,
+                    passwordController.text,
+                    nameController.text,
+                    phoneNumberController.text,
+                  );
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => LoginPage()),
