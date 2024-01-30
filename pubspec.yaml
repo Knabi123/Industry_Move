@@ -62,11 +62,15 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+<<<<<<< HEAD
     - assets/images/background-2.png
     - assets/images/background.png
     - assets/images/facebook.png
     - assets/images/gmail.png
     - assets/images/instagram.png
+=======
+    - assets/images/
+>>>>>>> f097a221914a349472032fbe9ef4996cdbe6699c
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
