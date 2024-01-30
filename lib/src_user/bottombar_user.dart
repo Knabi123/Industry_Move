@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:company/src_user/order_user.dart';
-import 'package:company/src/addproducttype.dart';
 
 void main() {
   runApp(MaterialApp(home: BottomBar_User()));
@@ -18,7 +17,7 @@ class BottomBar_User extends StatefulWidget {
 class _BottomBarState extends State<BottomBar_User> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
-    Addproducttype(),
+  
     Order_user()
   ];
 
