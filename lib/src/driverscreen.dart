@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, use_key_in_widget_constructors
+
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +11,11 @@ class DriverDetailPage extends StatefulWidget {
 
 class _DriverDetailPageState extends State<DriverDetailPage> {
   List<Driver> drivers = [];
-  File? _imageFile; 
+  File? _imageFile;
 
   Future<void> _getImage() async {
-final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       setState(() {
@@ -112,79 +115,78 @@ final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     return false; // นำเสนอโค้ดที่เหมาะสมสำหรับตรวจสอบเงื่อนไขแสดงรายละเอียดของคนขับ
   }
 
- void _showAddDialog() async {
-  String name = '';
-  String licensePlate = '';
-  String carid = '';
-  String driverId = '';
-  String driverPassword = '';
+  void _showAddDialog() async {
+    String name = '';
+    String licensePlate = '';
+    String carid = '';
+    String driverId = '';
+    String driverPassword = '';
 
-  await showDialog(
-    context: context,
-    builder: (context) {
-      return ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: 400.0),
-        child: AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          title: Text(
-            'Add Driver',
-            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-          ),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildTextField('Driver Name', (value) {
-                  name = value;
-                }),
-                _buildTextField('Car ID', (value) {
-                  carid = value;
-                }),
-                _buildTextField('License ID', (value) {
-                  licensePlate = value;
-                }),
-                _buildTextField('Driver ID', (value) {
-                  driverId = value;
-                }),
-                _buildTextField('Driver Password', (value) {
-                  driverPassword = value;
-                }),
-                _buildImageField(), 
-              ],
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: 400.0),
+          child: AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
             ),
+            title: Text(
+              'Add Driver',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildTextField('Driver Name', (value) {
+                    name = value;
+                  }),
+                  _buildTextField('Car ID', (value) {
+                    carid = value;
+                  }),
+                  _buildTextField('License ID', (value) {
+                    licensePlate = value;
+                  }),
+                  _buildTextField('Driver ID', (value) {
+                    driverId = value;
+                  }),
+                  _buildTextField('Driver Password', (value) {
+                    driverPassword = value;
+                  }),
+                  _buildImageField(),
+                ],
+              ),
+            ),
+            actions: [
+              _buildDialogButton('Cancel', () {
+                setState(() {
+                  _imageFile = null;
+                });
+                Navigator.pop(context);
+              }),
+              _buildDialogButton('Add', () {
+                setState(() {
+                  drivers.add(Driver(
+                    name: name,
+                    carid: carid,
+                    licensePlate: licensePlate,
+                    driverId: driverId,
+                    driverPassword: driverPassword,
+                    imageUrl: _imageFile?.path ?? '',
+                  ));
+
+                  _imageFile = null;
+                });
+                Navigator.pop(context);
+              }),
+            ],
           ),
-          actions: [
-            _buildDialogButton('Cancel', () {
-              setState(() {
-             
-                _imageFile = null;
-              });
-              Navigator.pop(context);
-            }),
-            _buildDialogButton('Add', () {
-              setState(() {
-                drivers.add(Driver(
-                  name: name,
-                  carid: carid,
-                  licensePlate: licensePlate,
-                  driverId: driverId,
-                  driverPassword: driverPassword,
-                  imageUrl: _imageFile?.path ?? '',
-                ));
-              
-                _imageFile = null;
-              });
-              Navigator.pop(context);
-            }),
-          ],
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
   void _showEditDialog(Driver driver) async {
     String name = driver.name;
@@ -226,7 +228,8 @@ final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
                   _buildTextField('Driver Password', (value) {
                     driverPassword = value;
                   }, initialValue: driverPassword),
-                  _buildImageField(initialValue: driver.imageUrl), // เพิ่มวิดเจ็ตรูปภาพ
+                  _buildImageField(
+                      initialValue: driver.imageUrl), // เพิ่มวิดเจ็ตรูปภาพ
                 ],
               ),
             ),
@@ -241,7 +244,8 @@ final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
                   driver.licensePlate = licensePlate;
                   driver.driverId = driverId;
                   driver.driverPassword = driverPassword;
-                  driver.imageUrl = _imageFile?.path ?? driver.imageUrl; // ใช้ path ของรูปที่เลือก
+                  driver.imageUrl = _imageFile?.path ??
+                      driver.imageUrl; // ใช้ path ของรูปที่เลือก
                 });
                 Navigator.pop(context);
               }),
@@ -263,7 +267,8 @@ final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
     Function(String) onChanged, {
     String? initialValue,
   }) {
-    TextEditingController controller = TextEditingController(text: initialValue);
+    TextEditingController controller =
+        TextEditingController(text: initialValue);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),

@@ -1,3 +1,5 @@
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 import 'package:company/src/bottombar.dart';
 import 'package:company/src_user/register.dart';
@@ -21,38 +23,37 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-  Container(
-    height: 300,
-    child: Stack(
-      children: <Widget>[
-        Positioned(
-          height: 275,
-          width: width + 20,
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/background.png'),
-                fit: BoxFit.fill,
+            Container(
+              height: 300,
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    height: 275,
+                    width: width + 20,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/background.png'),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    height: 310,
+                    width: width + 40,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/background-2.png'),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ),
-        Positioned(
-        
-          height: 310,
-          width: width + 40,
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/background-2.png'),
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-  ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 40),
               child: Column(
