@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:company/src/addproducttype.dart';
+import 'package:company/src/add_pro.dart';
 import 'package:company/src/driverscreen.dart';
 import 'package:company/src/orderscreen.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
-    Addproducttype(),
+    Add_Pro(),
     OrderScreen(),
     DriverDetailPage(),
   ];
