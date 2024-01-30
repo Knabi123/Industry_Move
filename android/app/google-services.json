@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "791240127140",
+    "firebase_url": "https://industry-move-default-rtdb.firebaseio.com",
     "project_id": "industry-move",
     "storage_bucket": "industry-move.appspot.com"
   },

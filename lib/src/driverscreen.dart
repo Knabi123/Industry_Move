@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class DriverDetailPage extends StatefulWidget {
   @override
@@ -92,6 +93,60 @@ final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
               ),
             _buildDriverImage(driver.imageUrl),
           ],
+      body: ListView.builder(
+        itemCount: drivers.length,
+        itemBuilder: (context, index) {
+          return _buildDriverCard(drivers[index]);
+        },
+      ),
+    );
+  }
+
+  Widget _buildDriverCard(Driver driver) {
+    return Card(
+      elevation: 3.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Driver Name: ${driver.name}'),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        _showEditDialog(driver);
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {
+                        _deleteDriver(driver);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Text('Car ID: ${driver.carid}'),
+            Text('License ID: ${driver.licensePlate}'),
+            if (shouldShowDriverDetails(driver))
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Driver ID: ${driver.driverId}'),
+                  Text('Driver Password: ${driver.driverPassword}'),
+                ],
+              ),
+            _buildDriverImage(driver.imageUrl),
+          ],
         ),
       ),
     );
@@ -108,7 +163,19 @@ final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
         : Container();
   }
 
+  Widget _buildDriverImage(String imageUrl) {
+    return imageUrl.isNotEmpty
+        ? Image.file(
+            File(imageUrl),
+            height: 100,
+            width: 100,
+            fit: BoxFit.cover,
+          )
+        : Container();
+  }
+
   bool shouldShowDriverDetails(Driver driver) {
+    return false; // นำเสนอโค้ดที่เหมาะสมสำหรับตรวจสอบเงื่อนไขแสดงรายละเอียดของคนขับ
     return false; // นำเสนอโค้ดที่เหมาะสมสำหรับตรวจสอบเงื่อนไขแสดงรายละเอียดของคนขับ
   }
 
@@ -320,6 +387,31 @@ final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
       ),
     );
   }
+
+  Widget _buildImageField({String? initialValue}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ElevatedButton(
+            onPressed: _getImage,
+            child: Text('Select Image'),
+          ),
+          _imageFile != null
+              ? Image.file(
+                  _imageFile!,
+                  height: 100,
+                  width: 100,
+                  fit: BoxFit.cover,
+                )
+              : initialValue != null
+                  ? _buildDriverImage(initialValue)
+                  : Container(),
+        ],
+      ),
+    );
+  }
 }
 
 class Driver {
@@ -329,6 +421,7 @@ class Driver {
   String driverId;
   String driverPassword;
   String imageUrl;
+  String imageUrl;
 
   Driver({
     required this.name,
@@ -336,6 +429,7 @@ class Driver {
     required this.carid,
     required this.driverId,
     required this.driverPassword,
+    required this.imageUrl,
     required this.imageUrl,
   });
 }
