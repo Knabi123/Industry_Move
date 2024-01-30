@@ -34,9 +34,10 @@ class RegisterForm extends StatelessWidget {
                 child: Text(
                   'Sign up',
                   style: TextStyle(
-                      fontSize: 40.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                    fontSize: 40.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
               ),
               SizedBox(height: 20.0),
@@ -45,6 +46,7 @@ class RegisterForm extends StatelessWidget {
                 child: Container(
                   alignment: Alignment.center,
                   child: TextFormField(
+                    controller: idController, // เพิ่มบรรทัดนี้
                     decoration: InputDecoration(
                       labelText: 'ID',
                       border: OutlineInputBorder(
@@ -62,6 +64,7 @@ class RegisterForm extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: TextFormField(
+                    controller: passwordController, // เพิ่มบรรทัดนี้
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(
@@ -81,6 +84,7 @@ class RegisterForm extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: TextFormField(
+                    controller: nameController, // เพิ่มบรรทัดนี้
                     decoration: InputDecoration(
                       labelText: 'Name',
                       border: OutlineInputBorder(
@@ -98,6 +102,7 @@ class RegisterForm extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.center,
                   child: TextFormField(
+                    controller: phoneNumberController, // เพิ่มบรรทัดนี้
                     decoration: InputDecoration(
                       labelText: 'Phone number',
                       border: OutlineInputBorder(
