@@ -1,8 +1,8 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, use_build_context_synchronously, deprecated_member_use, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
 
-import 'package:company/src_user/login.dart';
 import 'package:flutter/material.dart';
 import 'package:company/firestore_service.dart';
+import 'package:company/src_user/login.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
@@ -11,11 +11,21 @@ class RegisterPage extends StatelessWidget {
   }
 }
 
-class RegisterForm extends StatelessWidget {
+class RegisterForm extends StatefulWidget {
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
+
+class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
+
+  bool isIdEmpty = false;
+  bool isPasswordEmpty = false;
+  bool isNameEmpty = false;
+  bool isPhoneNumberEmpty = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,133 +33,172 @@ class RegisterForm extends StatelessWidget {
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        color: Colors.blue,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.fromARGB(255, 55, 0, 95),
+              Color.fromARGB(255, 217, 184, 245)
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 50.0),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: Text(
-                  'Sign up',
-                  style: TextStyle(
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+              SizedBox(height: 80.0),
+              Text(
+                'Sign up',
+                style: TextStyle(
+                  fontSize: 40.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
+              SizedBox(height: 30.0),
+              _buildTextField(idController, 'ID', Icons.person,
+                  isEmpty: isIdEmpty),
               SizedBox(height: 20.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50),
-                child: Container(
-                  alignment: Alignment.center,
-                  child: TextFormField(
-                    controller: idController, // เพิ่มบรรทัดนี้
-                    decoration: InputDecoration(
-                      labelText: 'ID',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
-                  ),
-                ),
-              ),
+              _buildTextField(passwordController, 'Password', Icons.lock,
+                  obscureText: true, isEmpty: isPasswordEmpty),
               SizedBox(height: 20.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: TextFormField(
-                    controller: passwordController, // เพิ่มบรรทัดนี้
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    obscureText: true,
-                  ),
-                ),
-              ),
+              _buildTextField(nameController, 'Name', Icons.person_outline,
+                  isEmpty: isNameEmpty),
               SizedBox(height: 20.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: TextFormField(
-                    controller: nameController, // เพิ่มบรรทัดนี้
-                    decoration: InputDecoration(
-                      labelText: 'Name',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50),
-                child: Align(
-                  alignment: Alignment.center,
-                  child: TextFormField(
-                    controller: phoneNumberController, // เพิ่มบรรทัดนี้
-                    decoration: InputDecoration(
-                      labelText: 'Phone number',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
-                    keyboardType: TextInputType.phone,
-                  ),
-                ),
-              ),
+              _buildTextField(
+                  phoneNumberController, 'Phone number', Icons.phone,
+                  keyboardType: TextInputType.phone,
+                  isEmpty: isPhoneNumberEmpty),
               SizedBox(height: 50),
               ElevatedButton(
                 onPressed: () async {
-                  await FirestoreService.addUser(
-                    idController.text,
-                    passwordController.text,
-                    nameController.text,
-                    phoneNumberController.text,
-                  );
+                  setState(() {
+                    isIdEmpty = idController.text.isEmpty;
+                    isPasswordEmpty = passwordController.text.isEmpty;
+                    isNameEmpty = nameController.text.isEmpty;
+                    isPhoneNumberEmpty = phoneNumberController.text.isEmpty;
+                  });
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginPage()),
-                  );
+                  if (!isIdEmpty &&
+                      !isPasswordEmpty &&
+                      !isNameEmpty &&
+                      !isPhoneNumberEmpty) {
+                    bool isIdDuplicate =
+                        await FirestoreService.isIdExists(idController.text);
+
+                    if (isIdDuplicate) {
+                      // แจ้งเตือนถ้า ID ซ้ำ
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                              Text('ID is already taken. Please Try again'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else {
+                      if (phoneNumberController.text.length != 10) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Phone number should not exceed 10 digits.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+                      if (passwordController.text.length < 8) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Password should be at least 8 characters.'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                        return;
+                      }
+                      await FirestoreService.addUser(
+                        idController.text,
+                        passwordController.text,
+                        nameController.text,
+                        phoneNumberController.text,
+                        role: 'Customer',
+                      );
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40.0),
+                    borderRadius: BorderRadius.circular(30.0),
                   ),
-                  backgroundColor: Colors.greenAccent[400],
+                  primary: const Color.fromARGB(255, 198, 124, 211),
                   padding: EdgeInsets.symmetric(
-                    horizontal: 100,
+                    horizontal: 50,
+                    vertical: 15,
                   ),
-                  minimumSize: Size(300, 60),
+                  minimumSize: Size(250, 60),
                 ),
                 child: Text(
                   'Submit',
                   style: TextStyle(
                     fontSize: 18.0,
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 255, 255, 255),
                   ),
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+      TextEditingController controller, String labelText, IconData icon,
+      {bool obscureText = false,
+      TextInputType keyboardType = TextInputType.text,
+      bool isEmpty = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(15.0),
+          border: isEmpty ? Border.all(color: Colors.red) : null,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextFormField(
+              controller: controller,
+              style: TextStyle(color: Colors.white),
+              onChanged: (value) {
+                setState(() {
+                  isEmpty = value.isEmpty;
+                });
+              },
+              decoration: InputDecoration(
+                labelText: labelText,
+                labelStyle: TextStyle(color: Colors.white),
+                hintText: labelText,
+                hintStyle: TextStyle(color: Colors.grey[600]),
+                prefixIcon: Icon(icon, color: Colors.white),
+                border: InputBorder.none,
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              ),
+              keyboardType: keyboardType,
+              obscureText: obscureText,
+            ),
+            if (isEmpty)
+              Text('Please enter $labelText',
+                  style: TextStyle(color: Colors.red)),
+          ],
         ),
       ),
     );

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, camel_case_types
 
+import 'package:company/src/Add_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:company/src_user/order_user.dart';
 
@@ -17,8 +18,8 @@ class BottomBar_User extends StatefulWidget {
 class _BottomBarState extends State<BottomBar_User> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
-  
-    Order_user()
+    Add_Pro(),
+    Order_user(),
   ];
 
   void _onItemTapped(int index) {

@@ -1,8 +1,8 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:company/src/bottombar.dart';
 import 'package:company/src_user/register.dart';
+import 'package:company/firestore_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -12,6 +12,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController idController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -93,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           child: TextField(
+                            controller: idController,
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Username",
@@ -103,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                         Container(
                           padding: EdgeInsets.all(5),
                           child: TextField(
+                            controller: passwordController,
                             obscuringCharacter: '*',
                             obscureText: true,
                             decoration: InputDecoration(
@@ -128,36 +133,39 @@ class _LoginPageState extends State<LoginPage> {
                     height: 20,
                   ),
                   Center(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BottomBar(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        height: 60,
-                        width: 250,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.purple,
-                              Colors.indigo,
-                            ],
-                          ),
-                          color: Colors.deepPurple,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Log in',
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        String id = idController.text;
+                        String password = passwordController.text;
+
+                        bool loginSuccess =
+                            await FirestoreService.login(id, password, context);
+
+                        if (!loginSuccess) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Invalid username or password'),
+                              backgroundColor: Colors.red,
                             ),
-                          ),
+                          );
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        primary: Colors.deepPurple,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 50,
+                          vertical: 15,
+                        ),
+                        minimumSize: Size(250, 60),
+                      ),
+                      child: Text(
+                        'Log in',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
                         ),
                       ),
                     ),
