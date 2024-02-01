@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
+import 'package:company/src/orderdetail.dart';
 import 'package:flutter/material.dart';
 
 class OrderScreen extends StatelessWidget {
@@ -36,7 +37,14 @@ class OrderScreen extends StatelessWidget {
           itemCount: orderList.length,
           itemBuilder: (BuildContext context, int index) {
             return InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Orderdetail(),
+                  ),
+                );
+              },
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 4.0),
                 decoration: BoxDecoration(

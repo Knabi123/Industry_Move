@@ -17,7 +17,7 @@ class AddType extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => Addproduct()),
+            MaterialPageRoute(builder: (context) => AddProduct()),
           );
         },
         child: Container(
