@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, unused_element, prefer_const_constructors, unused_local_variable
+// ignore_for_file: non_constant_identifier_names, unused_element, prefer_const_constructors, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
