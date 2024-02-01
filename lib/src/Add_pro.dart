@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types, non_constant_identifier_names, prefer_const_constructors, file_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -9,41 +11,42 @@ class Add_Pro extends StatefulWidget {
 }
 
 class _Add_ProState extends State<Add_Pro> {
-  final CollectionReference _Addtype = 
-  FirebaseFirestore.instance.collection('Addtype');
+  final CollectionReference _Addtype =
+      FirebaseFirestore.instance.collection('Addtype');
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home"),
       ),
-
       body: StreamBuilder(
-        stream: _Addtype.snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot){
-        if(streamSnapshot.hasData){
-          return ListView.builder(itemCount: streamSnapshot.data!.docs.length,
-          itemBuilder: (Context, index){
-            final DocumentSnapshot documentSnapshot = streamSnapshot.data!.docs[index];
-            return Card(
-              color: const Color.fromARGB(255,88,136,190),
-              shape:  RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                ),
-                margin: const EdgeInsets.all(10),
-                child: ListTile(
-                    title: Text(documentSnapshot['Type'],
-                    style:TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black
-                    ) ,),
-                ),
-            );
-          },
-          );
-        }
-       return const Center();
-      }),
+          stream: _Addtype.snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.hasData) {
+              return ListView.builder(
+                itemCount: streamSnapshot.data!.docs.length,
+                itemBuilder: (Context, index) {
+                  final DocumentSnapshot documentSnapshot =
+                      streamSnapshot.data!.docs[index];
+                  return Card(
+                    color: const Color.fromARGB(255, 88, 136, 190),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    margin: const EdgeInsets.all(10),
+                    child: ListTile(
+                      title: Text(
+                        documentSnapshot['Type'],
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black),
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
+            return const Center();
+          }),
     );
   }
 }
