@@ -1,5 +1,4 @@
 // ignore_for_file: use_key_in_widget_constructors, prefer_const_constructors, use_build_context_synchronously, deprecated_member_use, prefer_const_literals_to_create_immutables, library_private_types_in_public_api
-
 import 'package:flutter/material.dart';
 import 'package:company/firestore_service.dart';
 import 'package:company/src_user/login.dart';
@@ -48,13 +47,27 @@ class _RegisterFormState extends State<RegisterForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: 80.0),
-              Text(
-                'Sign up',
-                style: TextStyle(
-                  fontSize: 40.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => LoginPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  Text(
+                    'Sign up',
+                    style: TextStyle(
+                      fontSize: 40.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 30.0),
               _buildTextField(idController, 'ID', Icons.person,

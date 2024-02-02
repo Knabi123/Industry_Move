@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, non_constant_identifier_names, use_build_context_synchronously, file_names, camel_case_types, unused_element
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:company/src/addproduct.dart';

@@ -132,5 +132,17 @@ class FirestoreService {
     return false;
   }
 
+  static Future<void> setRole(String userId, String role) async {
+    try {
+      // นำ userId ไปใช้เป็น document ID
+      DocumentReference userRef = _firestore.collection('User').doc(userId);
+
+      // ทำการอัปเดตค่า role ใน document ของผู้ใช้
+      await userRef.update({'role': role});
+    } catch (e) {
+      print('Error during setRole: $e');
+    }
+  }
+
   // ไว้เพิ่มฟังก์ชั่นในFirebaseส่วนฐานข้อมูลจะเพิ่มอะไรก็เพิ่มเลย
 }
