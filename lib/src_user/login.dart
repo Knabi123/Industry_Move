@@ -1,8 +1,12 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, deprecated_member_use
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, prefer_const_literals_to_create_immutables, use_build_context_synchronously, deprecated_member_use, unused_local_variable, avoid_print
 
+import 'package:company/src_user/bottombar_user.dart';
 import 'package:flutter/material.dart';
 import 'package:company/src_user/register.dart';
 import 'package:company/firestore_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -14,9 +18,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final GoogleSignIn googleSignIn =
+      GoogleSignIn(clientId: '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');
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      return BottomBar_User();
+    }
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.purple[100],
@@ -191,31 +201,64 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white54,
-                        ),
-                        child: Image.asset(
-                          'assets/images/facebook.png',
-                          height: 40,
+                      GestureDetector(
+                        onTap: _loginWithFacebook,
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey.shade300),
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.white54,
+                          ),
+                          child: Image.asset(
+                            'assets/images/facebook.png', // รูป Google
+                            height: 40,
+                          ),
                         ),
                       ),
                       SizedBox(width: 20),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white54,
-                        ),
-                        child: Image.asset(
-                          'assets/images/gmail.png',
-                          height: 40,
-                        ),
-                      ),
+                      GestureDetector(
+                          onTap: () async {
+                            try {
+                              final GoogleSignInAccount? googleUser =
+                                  await GoogleSignIn().signIn();
+                              if (googleUser != null) {
+                                final GoogleSignInAuthentication googleAuth =
+                                    await googleUser.authentication;
+                                final OAuthCredential credential =
+                                    GoogleAuthProvider.credential(
+                                  accessToken: googleAuth.accessToken,
+                                  idToken: googleAuth.idToken,
+                                );
+                                final UserCredential userCredential =
+                                    await FirebaseAuth.instance
+                                        .signInWithCredential(credential);
+
+                                // เปลี่ยนหน้าไปยังหน้าที่ต้องการ
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BottomBar_User()),
+                                );
+                              } else {
+                                print("Sign in with Google canceled.");
+                              }
+                            } catch (e) {
+                              print("Error signing in with Google: $e");
+                            }
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey.shade300),
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.white54,
+                            ),
+                            child: Image.asset(
+                              'assets/images/gmail.png',
+                              height: 40,
+                            ),
+                          )),
                       SizedBox(width: 20),
                       Container(
                         padding: EdgeInsets.all(5),
@@ -238,5 +281,32 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _loginWithFacebook() async {
+    try {
+      // เรียกใช้งาน Flutter Facebook Auth เพื่อขอ Permission และดึงข้อมูลผู้ใช้จาก Facebook
+      final LoginResult result = await FacebookAuth.instance.login();
+
+      // ตรวจสอบว่าผู้ใช้ได้รับอนุญาตหรือไม่
+      if (result.status == LoginStatus.success) {
+        // ใช้ Token ที่ได้จากการล็อกอินเพื่อเข้าสู่ Firebase Authentication
+        final OAuthCredential credential =
+            FacebookAuthProvider.credential(result.accessToken!.token);
+        final UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BottomBar_User()), // ตัวอย่างเปลี่ยนไปยัง BottomBar_User
+        );
+        // เรียกใช้งาน userCredential.user เพื่อเข้าถึงข้อมูลของผู้ใช้ที่ลงทะเบียนแล้วกับ Firebase
+      } else {
+        print("Facebook login failed.");
+      }
+    } catch (e) {
+      print("Error signing in with Facebook: $e");
+    }
   }
 }
