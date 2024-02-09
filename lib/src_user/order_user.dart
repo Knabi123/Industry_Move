@@ -1,5 +1,6 @@
 // ignore_for_file: use_key_in_widget_constructors, camel_case_types, sort_child_properties_last, prefer_const_constructors
 
+import 'package:company/src_user/login.dart';
 import 'package:flutter/material.dart';
 import 'order_detail_user.dart';
 
@@ -22,7 +23,15 @@ class Order_user extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.menu),
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      LoginPage()), // HomePage() เป็นหน้าหลักหรือหน้าที่ต้องการ
+            );
+          },
         ),
         bottom: PreferredSize(
           child: Container(

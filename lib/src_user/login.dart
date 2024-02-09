@@ -18,15 +18,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final GoogleSignIn googleSignIn =
-      GoogleSignIn(clientId: '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');
+  final GoogleSignIn googleSignIn = GoogleSignIn(
+      clientId:
+          '791240127140-foosi28muhfk9lg2icjv259f0caijkqs.apps.googleusercontent.com');
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = FirebaseAuth.instance.currentUser;
-    if (currentUser != null) {
-      return BottomBar_User();
-    }
+    // final currentUser = FirebaseAuth.instance.currentUser;
+    // if (currentUser != null) {
+    //   return BottomBar_User();
+    // }
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.purple[100],
@@ -233,8 +234,6 @@ class _LoginPageState extends State<LoginPage> {
                                 final UserCredential userCredential =
                                     await FirebaseAuth.instance
                                         .signInWithCredential(credential);
-
-                                // เปลี่ยนหน้าไปยังหน้าที่ต้องการ
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
@@ -285,12 +284,10 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _loginWithFacebook() async {
     try {
-      // เรียกใช้งาน Flutter Facebook Auth เพื่อขอ Permission และดึงข้อมูลผู้ใช้จาก Facebook
       final LoginResult result = await FacebookAuth.instance.login();
 
       // ตรวจสอบว่าผู้ใช้ได้รับอนุญาตหรือไม่
       if (result.status == LoginStatus.success) {
-        // ใช้ Token ที่ได้จากการล็อกอินเพื่อเข้าสู่ Firebase Authentication
         final OAuthCredential credential =
             FacebookAuthProvider.credential(result.accessToken!.token);
         final UserCredential userCredential =
@@ -301,7 +298,6 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context) =>
                   BottomBar_User()), // ตัวอย่างเปลี่ยนไปยัง BottomBar_User
         );
-        // เรียกใช้งาน userCredential.user เพื่อเข้าถึงข้อมูลของผู้ใช้ที่ลงทะเบียนแล้วกับ Firebase
       } else {
         print("Facebook login failed.");
       }
