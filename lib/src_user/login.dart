@@ -285,8 +285,6 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _loginWithFacebook() async {
     try {
       final LoginResult result = await FacebookAuth.instance.login();
-
-      // ตรวจสอบว่าผู้ใช้ได้รับอนุญาตหรือไม่
       if (result.status == LoginStatus.success) {
         final OAuthCredential credential =
             FacebookAuthProvider.credential(result.accessToken!.token);
@@ -294,9 +292,7 @@ class _LoginPageState extends State<LoginPage> {
             await FirebaseAuth.instance.signInWithCredential(credential);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  BottomBar_User()), // ตัวอย่างเปลี่ยนไปยัง BottomBar_User
+          MaterialPageRoute(builder: (context) => BottomBar_User()),
         );
       } else {
         print("Facebook login failed.");
