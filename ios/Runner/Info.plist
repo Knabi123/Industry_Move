@@ -47,5 +47,16 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	</array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!--TODO Replace this value: -->
+				<string>com.googleusercontent.apps.791240127140-cds4tn7246jpvtup2e4kfjmjolhu2184</string>
+			</array>
+		</dict>
+	</array>	
 </dict>
 </plist>
