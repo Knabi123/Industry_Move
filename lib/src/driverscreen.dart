@@ -1,8 +1,10 @@
-// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, use_key_in_widget_constructors
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, use_build_context_synchronously
 
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DriverDetailPage extends StatefulWidget {
   @override
@@ -24,30 +26,18 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Driver'),
-        centerTitle: true,
-        backgroundColor: Color(0xFF864AF9),
-        elevation: 2.0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              _showAddDialog();
-            },
-          ),
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: drivers.length,
-        itemBuilder: (context, index) {
-          return _buildDriverCard(drivers[index]);
-        },
-      ),
-    );
+  Future<String> _uploadImageToFirebaseStorage(File imageFile) async {
+    try {
+      TaskSnapshot task = await FirebaseStorage.instance
+          .ref('images/${DateTime.now().toString()}')
+          .putFile(imageFile);
+
+      String imageUrl = await task.ref.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      print('Error uploading image: $e');
+      return '';
+    }
   }
 
   Widget _buildDriverCard(Driver driver) {
@@ -102,8 +92,8 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
 
   Widget _buildDriverImage(String imageUrl) {
     return imageUrl.isNotEmpty
-        ? Image.file(
-            File(imageUrl),
+        ? Image.network(
+            imageUrl,
             height: 100,
             width: 100,
             fit: BoxFit.cover,
@@ -111,8 +101,32 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
         : Container();
   }
 
+  Widget _buildImageField({String? initialValue}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ElevatedButton(
+            onPressed: _getImage,
+            child: Text('Select Image'),
+          ),
+          if (_imageFile != null)
+            Image.file(
+              _imageFile!,
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+            ),
+          if (_imageFile != null || initialValue != null)
+            _buildDriverImage(_imageFile?.path ?? initialValue ?? ''),
+        ],
+      ),
+    );
+  }
+
   bool shouldShowDriverDetails(Driver driver) {
-    return false; // นำเสนอโค้ดที่เหมาะสมสำหรับตรวจสอบเงื่อนไขแสดงรายละเอียดของคนขับ
+    return false;
   }
 
   void _showAddDialog() async {
@@ -161,25 +175,28 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
             ),
             actions: [
               _buildDialogButton('Cancel', () {
-                setState(() {
-                  _imageFile = null;
-                });
+                if (mounted) {
+                  setState(() {
+                    _imageFile = null;
+                  });
+                }
                 Navigator.pop(context);
               }),
-              _buildDialogButton('Add', () {
-                setState(() {
-                  drivers.add(Driver(
-                    name: name,
-                    carid: carid,
-                    licensePlate: licensePlate,
-                    driverId: driverId,
-                    driverPassword: driverPassword,
-                    imageUrl: _imageFile?.path ?? '',
-                  ));
-
-                  _imageFile = null;
-                });
-                Navigator.pop(context);
+              _buildDialogButton('Add', () async {
+                if (_imageFile != null) {
+                  String imageUrl =
+                      await _uploadImageToFirebaseStorage(_imageFile!);
+                  await _addDriverToFirestore(name, carid, licensePlate,
+                      driverId, driverPassword, imageUrl);
+                  setState(() {
+                    _imageFile = null;
+                  });
+                  Navigator.pop(context);
+                } else {
+                  // Handle the case when no image is selected
+                  // You may want to show an error message or handle it in your own way
+                  print("No image selected");
+                }
               }),
             ],
           ),
@@ -228,8 +245,7 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
                   _buildTextField('Driver Password', (value) {
                     driverPassword = value;
                   }, initialValue: driverPassword),
-                  _buildImageField(
-                      initialValue: driver.imageUrl), // เพิ่มวิดเจ็ตรูปภาพ
+                  _buildImageField(initialValue: driver.imageUrl),
                 ],
               ),
             ),
@@ -237,17 +253,18 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
               _buildDialogButton('Cancel', () {
                 Navigator.pop(context);
               }),
-              _buildDialogButton('Save', () {
-                setState(() {
-                  driver.name = name;
-                  driver.carid = carid;
-                  driver.licensePlate = licensePlate;
-                  driver.driverId = driverId;
-                  driver.driverPassword = driverPassword;
-                  driver.imageUrl = _imageFile?.path ??
-                      driver.imageUrl; // ใช้ path ของรูปที่เลือก
-                });
-                Navigator.pop(context);
+              _buildDialogButton('Save', () async {
+                if (_imageFile != null) {
+                  String imageUrl =
+                      await _uploadImageToFirebaseStorage(_imageFile!);
+                  await _updateDriverInFirestore(driver, name, carid,
+                      licensePlate, driverId, driverPassword, imageUrl);
+                  if (mounted) {
+                    Navigator.pop(context);
+                  }
+                } else {
+                  print("No image selected");
+                }
               }),
             ],
           ),
@@ -257,9 +274,7 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
   }
 
   void _deleteDriver(Driver driver) {
-    setState(() {
-      drivers.remove(driver);
-    });
+    _deleteDriverFromFirestore(driver);
   }
 
   Widget _buildTextField(
@@ -301,33 +316,98 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
     );
   }
 
-  Widget _buildImageField({String? initialValue}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ElevatedButton(
-            onPressed: _getImage,
-            child: Text('Select Image'),
+  Future<void> _addDriverToFirestore(
+      String name,
+      String carid,
+      String licensePlate,
+      String driverId,
+      String driverPassword,
+      String imageUrl) async {
+    await FirebaseFirestore.instance.collection('drivers').add({
+      'name': name,
+      'carid': carid,
+      'licensePlate': licensePlate,
+      'driverId': driverId,
+      'driverPassword': driverPassword,
+      'imageUrl': imageUrl,
+    });
+  }
+
+  Future<void> _updateDriverInFirestore(
+      Driver driver,
+      String name,
+      String carid,
+      String licensePlate,
+      String driverId,
+      String driverPassword,
+      String imageUrl) async {
+    await FirebaseFirestore.instance
+        .collection('drivers')
+        .doc(driver.id)
+        .update({
+      'name': name,
+      'carid': carid,
+      'licensePlate': licensePlate,
+      'driverId': driverId,
+      'driverPassword': driverPassword,
+      'imageUrl': imageUrl,
+    });
+  }
+
+  Future<void> _deleteDriverFromFirestore(Driver driver) {
+    return FirebaseFirestore.instance
+        .collection('drivers')
+        .doc(driver.id)
+        .delete();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Driver'),
+        centerTitle: true,
+        backgroundColor: Color(0xFF864AF9),
+        elevation: 2.0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              _showAddDialog();
+            },
           ),
-          _imageFile != null
-              ? Image.file(
-                  _imageFile!,
-                  height: 100,
-                  width: 100,
-                  fit: BoxFit.cover,
-                )
-              : initialValue != null
-                  ? _buildDriverImage(initialValue)
-                  : Container(),
         ],
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('drivers').snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          drivers.clear();
+
+          for (var document in snapshot.data!.docs) {
+            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+            drivers.add(Driver.fromMap(document.id, data));
+          }
+
+          return ListView.builder(
+            itemCount: drivers.length,
+            itemBuilder: (context, index) {
+              return _buildDriverCard(drivers[index]);
+            },
+          );
+        },
       ),
     );
   }
 }
 
 class Driver {
+  String id;
   String name;
   String licensePlate;
   String carid;
@@ -336,6 +416,7 @@ class Driver {
   String imageUrl;
 
   Driver({
+    required this.id,
     required this.name,
     required this.licensePlate,
     required this.carid,
@@ -343,4 +424,16 @@ class Driver {
     required this.driverPassword,
     required this.imageUrl,
   });
+
+  factory Driver.fromMap(String id, Map<String, dynamic> map) {
+    return Driver(
+      id: id,
+      name: map['name'] ?? '',
+      licensePlate: map['licensePlate'] ?? '',
+      carid: map['carid'] ?? '',
+      driverId: map['driverId'] ?? '',
+      driverPassword: map['driverPassword'] ?? '',
+      imageUrl: map['imageUrl'] ?? '',
+    );
+  }
 }

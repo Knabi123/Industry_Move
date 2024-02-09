@@ -1,9 +1,10 @@
-// ignore_for_file: non_constant_identifier_names, unused_element, prefer_const_constructors, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously
+// ignore_for_file: non_constant_identifier_names, unused_element, prefer_const_constructors, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously, unused_field, no_leading_underscores_for_local_identifiers
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
 
@@ -19,10 +20,10 @@ class _AddProductState extends State<AddProduct> {
   final TextEditingController _WeightController = TextEditingController();
   final TextEditingController _PriceController = TextEditingController();
   final TextEditingController _UnitController = TextEditingController();
+  File? _imageUrl;
 
   final CollectionReference _AddProduct =
       FirebaseFirestore.instance.collection('Addproduct');
-
   Future<void> _create([DocumentSnapshot? documentSnapshot]) async {
     await showModalBottomSheet(
         isScrollControlled: true,
@@ -88,51 +89,71 @@ class _AddProductState extends State<AddProduct> {
                     Text("Upload Image"),
                     IconButton(
                         onPressed: () async {
-                          final file = await ImagePicker()
-                              .pickImage(source: ImageSource.gallery);
-                          if (file == null) return;
-                          String fileName =
-                              DateTime.now().microsecondsSinceEpoch.toString();
-                        },
-                        icon: const Icon(Icons.camera_alt)),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                    onPressed: () async {
-                      final String ProductID = _ProductIDController.text;
-                      final String ProductName = _ProductNameController.text;
-                      final String Size = _SizeController.text;
-                      final String Weight = _WeightController.text;
-                      final String Price = _PriceController.text;
-                      final String Unit = _UnitController.text;
-                      final String Detail = _DetailController.text;
+                          final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+if (file == null) return;
+String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+setState(() {
+  _imageUrl = File(file.path);
+});
 
-                      if (ProductID != null) {
-                        await _AddProduct.add({
-                          "ProductID": ProductID,
-                          "ProductName": ProductName,
-                          "Size": Size,
-                          "Weight": Weight,
-                          "Price": Price,
-                          "Unit": Unit,
-                          "Detail": Detail,
-                        });
-                        _ProductIDController.text = '';
-                        _ProductNameController.text = '';
-                        _SizeController.text = '';
-                        _WeightController.text = '';
-                        _PriceController.text = '';
-                        _UnitController.text = '';
-                        _DetailController.text = '';
-
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: const Text("Create"))
+                  },
+                  icon: const Icon(Icons.camera_alt),
+                ),
               ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                // Retrieve data from text fields
+                final String ProductID = _ProductIDController.text;
+                final String ProductName = _ProductNameController.text;
+                final String Size = _SizeController.text;
+                final String Weight = _WeightController.text;
+                final String Price = _PriceController.text;
+                final String Unit = _UnitController.text;
+                final String Detail = _DetailController.text;
+                 String imageUrl = '';
+                  if (_imageUrl != null) {
+                    final firebase_storage.Reference ref = firebase_storage
+                        .FirebaseStorage.instance
+                        .ref()
+                        .child('product_images')
+                        .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+                    await ref.putFile(_imageUrl!);
+                    imageUrl = await ref.getDownloadURL();
+                  }
+
+                if (ProductID != null) {
+                  await _AddProduct.doc(documentSnapshot?.id).set({
+                    "ProductID": ProductID,
+                    "ProductName": ProductName,
+                    "Size": Size,
+                    "Weight": Weight,
+                    "Price": Price,
+                    "Unit": Unit,
+                    "Detail": Detail,
+                    // Add image URL to Firestore
+                    "ImageUrl": imageUrl // Assuming imageUrl is the variable holding the URL
+                  });
+                  
+                  // Clear text fields
+                  _ProductIDController.text = '';
+                  _ProductNameController.text = '';
+                  _SizeController.text = '';
+                  _WeightController.text = '';
+                  _PriceController.text = '';
+                  _UnitController.text = '';
+                  _DetailController.text = '';
+                    setState(() {
+                      _imageUrl = null;
+                    });
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Text("Create"),
+            )],
             ),
           );
         });
@@ -148,6 +169,7 @@ class _AddProductState extends State<AddProduct> {
       _UnitController.text = documentSnapshot['Unit'];
       _DetailController.text = documentSnapshot['Detail'];
     }
+     File? _imageFile;
     await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -208,11 +230,19 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     IconButton(
                         onPressed: () async {
-                          final file = await ImagePicker()
+                          final pickedFile = await ImagePicker()
                               .pickImage(source: ImageSource.gallery);
-                          if (file == null) return;
+                          if (pickedFile == null) return;
+                          String fileName = DateTime.now().microsecondsSinceEpoch.toString();
+                          
+                      setState(() {
+                        _imageFile = File(pickedFile.path);
+                      });
+                    
                         },
-                        icon: const Icon(Icons.camera_alt)),
+                        icon: const Icon(Icons.camera_alt)
+                        ),
+                        if (_imageFile != null) Image.file(_imageFile!),
                   ],
                 ),
                 const SizedBox(
@@ -227,16 +257,31 @@ class _AddProductState extends State<AddProduct> {
                       final String Price = _PriceController.text;
                       final String Unit = _UnitController.text;
                       final String Detail = _DetailController.text;
-                      if (ProductID != null) {
-                        await _AddProduct.doc(documentSnapshot!.id).update({
-                          "ProductID": ProductID,
-                          "ProductName": ProductName,
-                          "Size": Size,
-                          "Weight": Weight,
-                          "Price": Price,
-                          "Unit": Unit,
-                          "Detail": Detail,
-                        });
+                      if (ProductID.isNotEmpty) {
+                  // Upload image if available
+                  String imageUrl = '';
+if (documentSnapshot != null) {
+  imageUrl = documentSnapshot['ImageUrl'] ?? '';
+}
+                  if (_imageFile != null) {
+                    final ref = firebase_storage.FirebaseStorage.instance
+                        .ref()
+                        .child('product_images')
+                        .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
+                    await ref.putFile(_imageFile!);
+                    imageUrl = await ref.getDownloadURL();
+                  }
+
+                  await _AddProduct.doc(documentSnapshot!.id).update({
+                    "ProductID": ProductID,
+                    "ProductName": ProductName,
+                    "Size": Size,
+                    "Weight": Weight,
+                    "Price": Price,
+                    "Unit": Unit,
+                    "Detail": Detail,
+                    "ImageUrl": imageUrl,
+                  });
                         _ProductIDController.text = '';
                         _ProductNameController.text = '';
                         _SizeController.text = '';
@@ -244,7 +289,9 @@ class _AddProductState extends State<AddProduct> {
                         _PriceController.text = '';
                         _UnitController.text = '';
                         _DetailController.text = '';
-
+                   setState(() {
+                    _imageFile = null;
+                  });
                         Navigator.of(context).pop();
                       }
                     },
@@ -261,14 +308,15 @@ class _AddProductState extends State<AddProduct> {
     ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("You have successfully delete a type")));
   }
-
+ late Stream<QuerySnapshot> _stream;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Home"),
       ),
-      body: StreamBuilder(
+      body: StreamBuilder<QuerySnapshot>(
+          
           stream: _AddProduct.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             if (streamSnapshot.hasData) {
@@ -277,7 +325,7 @@ class _AddProductState extends State<AddProduct> {
                 itemBuilder: (Context, index) {
                   final DocumentSnapshot documentSnapshot =
                       streamSnapshot.data!.docs[index];
-
+          
                   return Card(
                     color: const Color.fromARGB(255, 88, 136, 190),
                     shape: RoundedRectangleBorder(
@@ -295,7 +343,14 @@ class _AddProductState extends State<AddProduct> {
                           children: [
                             SizedBox(
                               height: 10,
-                            ),
+                            ), if (documentSnapshot['ImageUrl'] != null)
+              Image.network(
+                documentSnapshot['ImageUrl'],
+                width: 50, // Adjust width as needed
+                height: 50, // Adjust height as needed
+                fit: BoxFit.cover, // Adjust image fit as needed
+              ),
+              SizedBox(height: 10,),
                             Row(
                               children: [
                                 Text("Brand:   "),
@@ -341,11 +396,14 @@ class _AddProductState extends State<AddProduct> {
                                   children: [
                                     Text("   Unit:  "),
                                     Text(documentSnapshot['Unit']),
+                                   
                                   ],
                                 ),
+             
                               ],
                             ),
                           ]),
+                          
                       trailing: SizedBox(
                         width: 100,
                         child: Row(
@@ -359,6 +417,7 @@ class _AddProductState extends State<AddProduct> {
                           ],
                         ),
                       ),
+                    
                     ),
                   );
                 },
@@ -367,6 +426,7 @@ class _AddProductState extends State<AddProduct> {
             return const Center(
               child: CircularProgressIndicator(),
             );
+            
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _create(),

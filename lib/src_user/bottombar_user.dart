@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, camel_case_types
+// ignore_for_file: prefer_const_constructors, camel_case_types, prefer_typing_uninitialized_variables
 
-import 'package:company/src/Add_pro.dart';
+import 'package:company/src/Type_User.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:company/src_user/order_user.dart';
 
@@ -18,7 +19,7 @@ class BottomBar_User extends StatefulWidget {
 class _BottomBarState extends State<BottomBar_User> {
   int _selectedIndex = 0;
   static final List<Widget> _widgetOptions = <Widget>[
-    Add_Pro(),
+    Type_User(),
     Order_user(),
   ];
 
@@ -32,13 +33,20 @@ class _BottomBarState extends State<BottomBar_User> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(child: _widgetOptions[_selectedIndex]),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Color.fromARGB(255, 4, 195, 248),
+        color: Color.fromARGB(255, 1, 153, 255),
+        index: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.shop), label: "Shop"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.description), label: "Order"),
+          Icon(
+            Icons.store,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.list_alt,
+            color: Colors.white,
+          )
         ],
       ),
     );

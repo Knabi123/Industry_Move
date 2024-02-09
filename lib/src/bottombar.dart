@@ -3,6 +3,7 @@
 import 'package:company/src/Add_pro.dart';
 import 'package:company/src/driverscreen.dart';
 import 'package:company/src/orderscreen.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget {
@@ -29,13 +30,24 @@ class _BottomBarState extends State<BottomBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(child: _widgetOptions[_selectedIndex]),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: const Color.fromRGBO(225, 190, 231, 1),
+        color: Colors.deepPurple,
+        index: _selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Order"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Driver"),
+          Icon(
+            Icons.store,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.list_alt,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.fire_truck,
+            color: Colors.white,
+          ),
         ],
       ),
     );

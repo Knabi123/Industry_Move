@@ -121,8 +121,14 @@ class _Add_ProState extends State<Add_Pro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.purple[100],
       appBar: AppBar(
-        title: const Text("Home"),
+        backgroundColor: Colors.deepPurple,
+        centerTitle: true,
+        title: const Text(
+          "Home",
+          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        ),
       ),
       body: StreamBuilder(
           stream: _Addtype.snapshots(),
@@ -135,7 +141,7 @@ class _Add_ProState extends State<Add_Pro> {
                       streamSnapshot.data!.docs[index];
 
                   return Card(
-                      color: const Color.fromARGB(255, 88, 136, 190),
+                      color: Colors.deepPurple[300],
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -181,7 +187,7 @@ class _Add_ProState extends State<Add_Pro> {
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _create(),
-        backgroundColor: const Color.fromARGB(255, 88, 136, 190),
+        backgroundColor: Colors.deepPurple[400],
         child: const Icon(Icons.add),
       ),
     );
