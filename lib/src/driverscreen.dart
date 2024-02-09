@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, use_build_context_synchronously
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, use_build_context_synchronously, avoid_function_literals_in_foreach_calls
 
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -192,11 +192,7 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
                     _imageFile = null;
                   });
                   Navigator.pop(context);
-                } else {
-                  // Handle the case when no image is selected
-                  // You may want to show an error message or handle it in your own way
-                  print("No image selected");
-                }
+                } else {}
               }),
             ],
           ),
@@ -260,10 +256,17 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
                   await _updateDriverInFirestore(driver, name, carid,
                       licensePlate, driverId, driverPassword, imageUrl);
                   if (mounted) {
+                    setState(() {
+                      _imageFile = null;
+                    });
                     Navigator.pop(context);
                   }
                 } else {
-                  print("No image selected");
+                  await _updateDriverInFirestore(driver, name, carid,
+                      licensePlate, driverId, driverPassword, driver.imageUrl);
+                  if (mounted) {
+                    Navigator.pop(context);
+                  }
                 }
               }),
             ],
@@ -389,10 +392,10 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
 
           drivers.clear();
 
-          for (var document in snapshot.data!.docs) {
+          snapshot.data!.docs.forEach((document) {
             Map<String, dynamic> data = document.data() as Map<String, dynamic>;
             drivers.add(Driver.fromMap(document.id, data));
-          }
+          });
 
           return ListView.builder(
             itemCount: drivers.length,
