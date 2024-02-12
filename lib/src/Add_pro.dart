@@ -151,8 +151,8 @@ class _Add_ProState extends State<Add_Pro> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    AddProduct()), // สมมติว่าหน้า AddProduct มีชื่อว่า AddProduct
+                                builder: (context) => AddProduct(
+                                    productType: documentSnapshot['Type'])),
                           );
                         },
                         child: ListTile(
