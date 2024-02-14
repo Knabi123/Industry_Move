@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, file_names, prefer_const_constructors, non_constant_identifier_names
+// ignore_for_file: camel_case_types, file_names, prefer_const_constructors, non_constant_identifier_names, unused_import
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'buyproduct.dart';
@@ -22,12 +22,6 @@ class _Type_UserState extends State<Type_User> {
         home: Scaffold(
       appBar: AppBar(
         title: const Text("Home"),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () => Get.to(() => Cart()),
-          ),
-        ],
       ),
       body: StreamBuilder(
           stream: _Addtype.snapshots(),
@@ -50,8 +44,9 @@ class _Type_UserState extends State<Type_User> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    BuyProduct()), // สมมติว่าหน้า AddProduct มีชื่อว่า AddProduct
+                                builder: (context) => BuyProduct(
+                                    productType: documentSnapshot[
+                                        'Type'])), // สมมติว่าหน้า AddProduct มีชื่อว่า AddProduct
                           );
                         },
                         child: ListTile(
