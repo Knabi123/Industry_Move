@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_import
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, prefer_const_constructors_in_immutables, library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'cart.dart';
@@ -29,13 +29,13 @@ class _BuyProductState extends State<BuyProduct> {
           IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      ShoppingCart(cartItems: cartController.cartItems),
-                ),
-              );
+            Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (context) => ShoppingCart(cartItems: cartController.cartItems),
+  ),
+);
+
             },
           ),
         ],
@@ -81,13 +81,12 @@ class _BuyProductState extends State<BuyProduct> {
                         SizedBox(
                           height: 10,
                         ),
-                        Row(
-                          children: [
-                            Text("Brand:   "),
-                            Text(documentSnapshot['ProductName'] ??
-                                'N/A'), // ใส่ค่าเริ่มต้น 'N/A' ถ้ามีค่าเป็น null
-                          ],
-                        ),
+                       Row(
+  children: [
+    Text("Brand:   "),
+    Text(documentSnapshot['ProductName'] ?? 'N/A'), // ใส่ค่าเริ่มต้น 'N/A' ถ้ามีค่าเป็น null
+  ],
+),
                         SizedBox(
                           height: 10,
                         ),
@@ -137,23 +136,25 @@ class _BuyProductState extends State<BuyProduct> {
                       width: 150,
                       child: Row(
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              addToCart(
-                                documentSnapshot['ProductID'],
-                                documentSnapshot['ProductName'],
-                                documentSnapshot['ImageUrl'],
-                                documentSnapshot['Price'],
-                              );
+                    ElevatedButton(
+  onPressed: () {
+    addToCart(
+      documentSnapshot['ProductID'],
+      documentSnapshot['ProductName'],
+      documentSnapshot['ImageUrl'],
+      documentSnapshot['Price'],
+    );
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('เพิ่มลงในตะกร้าแล้ว'),
-                                ),
-                              );
-                            },
-                            child: Text("Add to Cart"),
-                          ),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('เพิ่มลงในตะกร้าแล้ว'),
+      ),
+    );
+  },
+  child: Text("Add to Cart"),
+),
+
+
                         ],
                       ),
                     ),
@@ -170,48 +171,44 @@ class _BuyProductState extends State<BuyProduct> {
     );
   }
 
-  void addToCart(
-    String productId,
-    String productName,
-    String imageUrl,
-    String price,
-  ) {
-    setState(() {
-      try {
-        var existingItem = cartController.cartItems.firstWhere(
-          (item) => item.productId == productId,
-          orElse: () => CartItem(
-            productId: productId,
-            productName: productName,
-            imageUrl: imageUrl,
-            price: double.tryParse(price) ?? 0.0,
-            quantity: 0,
-          ),
-        );
-
-        if (existingItem.quantity == 0) {
-          cartController.cartItems.add(
-            CartItem(
+ void addToCart(
+      String productId,
+      String productName,
+      String imageUrl,
+      String price,
+    ) {
+      setState(() {
+        try {
+          var existingItem = cartController.cartItems.firstWhere(
+            (item) => item.productId == productId,
+            orElse: () => CartItem(
               productId: productId,
               productName: productName,
               imageUrl: imageUrl,
               price: double.tryParse(price) ?? 0.0,
-              quantity: 1,
+              quantity: 0,
             ),
           );
-        } else {
-          existingItem.quantity++;
-        }
-      } catch (e) {
-        print("Error: $e");
-      }
-    });
-  }
-}
 
-class CartController {
-  get cartItems => null;
-}
+          if (existingItem.quantity == 0) {
+            cartController.cartItems.add(
+              CartItem(
+                productId: productId,
+                productName: productName,
+                imageUrl: imageUrl,
+                price: double.tryParse(price) ?? 0.0,
+                quantity: 1,
+              ),
+            );
+          } else {
+            existingItem.quantity++;
+          }
+        } catch (e) {
+          print("Error: $e");
+        }
+      });
+    }
+  }
 
 class ShoppingCart extends StatefulWidget {
   final List<CartItem> cartItems;
