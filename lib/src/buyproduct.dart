@@ -1,6 +1,9 @@
-// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, prefer_const_constructors_in_immutables, library_private_types_in_public_api
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, prefer_const_constructors_in_immutables, library_private_types_in_public_api, unused_import
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'cart.dart';
+import 'CartController.dart';
+import 'package:get/get.dart';
 
 class BuyProduct extends StatefulWidget {
   final String productType;
@@ -14,7 +17,7 @@ class _BuyProductState extends State<BuyProduct> {
   final CollectionReference _AddProduct =
       FirebaseFirestore.instance.collection('Addproduct');
 
-  List<CartItem> cartItems = [];
+  CartController cartController = Get.find(); // เพิ่มบรรทัดนี้
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,8 @@ class _BuyProductState extends State<BuyProduct> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ShoppingCart(cartItems: cartItems),
+                  builder: (context) =>
+                      ShoppingCart(cartItems: cartController.cartItems),
                 ),
               );
             },
@@ -80,7 +84,8 @@ class _BuyProductState extends State<BuyProduct> {
                         Row(
                           children: [
                             Text("Brand:   "),
-                            Text(documentSnapshot['ProductName']),
+                            Text(documentSnapshot['ProductName'] ??
+                                'N/A'), // ใส่ค่าเริ่มต้น 'N/A' ถ้ามีค่าเป็น null
                           ],
                         ),
                         SizedBox(
@@ -173,7 +178,7 @@ class _BuyProductState extends State<BuyProduct> {
   ) {
     setState(() {
       try {
-        var existingItem = cartItems.firstWhere(
+        var existingItem = cartController.cartItems.firstWhere(
           (item) => item.productId == productId,
           orElse: () => CartItem(
             productId: productId,
@@ -185,7 +190,7 @@ class _BuyProductState extends State<BuyProduct> {
         );
 
         if (existingItem.quantity == 0) {
-          cartItems.add(
+          cartController.cartItems.add(
             CartItem(
               productId: productId,
               productName: productName,
@@ -198,26 +203,14 @@ class _BuyProductState extends State<BuyProduct> {
           existingItem.quantity++;
         }
       } catch (e) {
-        print("รูปแบบ 'Price' ไม่ถูกต้อง: $price");
+        print("Error: $e");
       }
     });
   }
 }
 
-class CartItem {
-  final String productId;
-  final String productName;
-  final String imageUrl;
-  final double price;
-  int quantity;
-
-  CartItem({
-    required this.productId,
-    required this.productName,
-    required this.imageUrl,
-    required this.price,
-    required this.quantity,
-  });
+class CartController {
+  get cartItems => null;
 }
 
 class ShoppingCart extends StatefulWidget {
@@ -260,6 +253,9 @@ class _ShoppingCartState extends State<ShoppingCart> {
                       setState(() {
                         if (cartItem.quantity > 0) {
                           cartItem.quantity--;
+                        } else {
+                          // ถ้าปริมาณเป็น 0 ให้ลบออกจากตะกร้า
+                          widget.cartItems.remove(cartItem);
                         }
                       });
                     },

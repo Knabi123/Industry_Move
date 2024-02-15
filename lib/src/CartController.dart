@@ -1,15 +1,14 @@
-// ignore_for_file: file_names
-
 import 'package:get/get.dart';
+import 'cart.dart' as cart;
 
 class CartController extends GetxController {
-  RxList<String> cartItems = <String>[].obs;
+  List<cart.CartItem> cartItems = [];
 
-  void addToCart(String item) {
+  void addToCart(cart.CartItem item) {
     cartItems.add(item);
   }
 
-  void removeFromCart(String item) {
+  void removeFromCart(cart.CartItem item) {
     cartItems.remove(item);
   }
 }
