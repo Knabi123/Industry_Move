@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types, file_names, prefer_const_constructors, non_constant_identifier_names, unused_import
+// ignore_for_file: camel_case_types, file_names, prefer_const_constructors, non_constant_identifier_names, unused_import, unused_local_variable, use_key_in_widget_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'buyproduct.dart';
@@ -20,7 +20,7 @@ class _Type_UserState extends State<Type_User> {
 
   @override
   Widget build(BuildContext context) {
-    CartController cartController = Get.put(CartController()); 
+    CartController cartController = Get.put(CartController());
 
     return GetMaterialApp(
       home: Scaffold(

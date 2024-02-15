@@ -1,5 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:get/get.dart';
-import 'cart.dart'as cart;
+import 'cart.dart' as cart;
 
 class CartController extends GetxController {
   List<cart.CartItem> cartItems = [];
