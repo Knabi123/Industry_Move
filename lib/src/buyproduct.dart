@@ -1,4 +1,5 @@
-// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, prefer_const_constructors_in_immutables, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, avoid_print, use_key_in_widget_constructors, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'cart.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 
 class BuyProduct extends StatefulWidget {
   final String productType;
+
   const BuyProduct({Key? key, required this.productType}) : super(key: key);
 
   @override
@@ -17,7 +19,7 @@ class _BuyProductState extends State<BuyProduct> {
   final CollectionReference _AddProduct =
       FirebaseFirestore.instance.collection('Addproduct');
 
-  CartController cartController = Get.find(); // เพิ่มบรรทัดนี้
+  CartController cartController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +31,13 @@ class _BuyProductState extends State<BuyProduct> {
           IconButton(
             icon: Icon(Icons.shopping_cart),
             onPressed: () {
-            Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => ShoppingCart(cartItems: cartController.cartItems),
-  ),
-);
-
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ShoppingCart(cartItems: cartController.cartItems),
+                ),
+              );
             },
           ),
         ],
@@ -68,9 +70,7 @@ class _BuyProductState extends State<BuyProduct> {
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         if (documentSnapshot['ImageUrl'] != null)
                           Image.network(
                             documentSnapshot['ImageUrl'],
@@ -78,23 +78,17 @@ class _BuyProductState extends State<BuyProduct> {
                             height: 50,
                             fit: BoxFit.cover,
                           ),
-                        SizedBox(
-                          height: 10,
+                        SizedBox(height: 10),
+                        Row(
+                          children: [
+                            Text("Brand:   "),
+                            Text(documentSnapshot['ProductName'] ?? 'N/A'),
+                          ],
                         ),
-                       Row(
-  children: [
-    Text("Brand:   "),
-    Text(documentSnapshot['ProductName'] ?? 'N/A'), // ใส่ค่าเริ่มต้น 'N/A' ถ้ามีค่าเป็น null
-  ],
-),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         Text("Detail:"),
                         Text(documentSnapshot['Detail']),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         Row(
                           children: [
                             Row(
@@ -111,9 +105,7 @@ class _BuyProductState extends State<BuyProduct> {
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10),
                         Row(
                           children: [
                             Row(
@@ -134,28 +126,22 @@ class _BuyProductState extends State<BuyProduct> {
                     ),
                     trailing: SizedBox(
                       width: 150,
-                      child: Row(
-                        children: [
-                    ElevatedButton(
-  onPressed: () {
-    addToCart(
-      documentSnapshot['ProductID'],
-      documentSnapshot['ProductName'],
-      documentSnapshot['ImageUrl'],
-      documentSnapshot['Price'],
-    );
+                      child: ElevatedButton(
+                        onPressed: () {
+                          addToCart(
+                            documentSnapshot['ProductID'],
+                            documentSnapshot['ProductName'],
+                            documentSnapshot['ImageUrl'],
+                            documentSnapshot['Price'],
+                          );
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('เพิ่มลงในตะกร้าแล้ว'),
-      ),
-    );
-  },
-  child: Text("Add to Cart"),
-),
-
-
-                        ],
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('เพิ่มลงในตะกร้าแล้ว'),
+                            ),
+                          );
+                        },
+                        child: Text("Add to Cart"),
                       ),
                     ),
                   ),
@@ -171,44 +157,44 @@ class _BuyProductState extends State<BuyProduct> {
     );
   }
 
- void addToCart(
-      String productId,
-      String productName,
-      String imageUrl,
-      String price,
-    ) {
-      setState(() {
-        try {
-          var existingItem = cartController.cartItems.firstWhere(
-            (item) => item.productId == productId,
-            orElse: () => CartItem(
+  void addToCart(
+    String productId,
+    String productName,
+    String imageUrl,
+    String price,
+  ) {
+    setState(() {
+      try {
+        var existingItem = cartController.cartItems.firstWhere(
+          (item) => item.productId == productId,
+          orElse: () => CartItem(
+            productId: productId,
+            productName: productName,
+            imageUrl: imageUrl,
+            price: double.tryParse(price) ?? 0.0,
+            quantity: 0,
+          ),
+        );
+
+        if (existingItem.quantity == 0) {
+          cartController.cartItems.add(
+            CartItem(
               productId: productId,
               productName: productName,
               imageUrl: imageUrl,
               price: double.tryParse(price) ?? 0.0,
-              quantity: 0,
+              quantity: 1,
             ),
           );
-
-          if (existingItem.quantity == 0) {
-            cartController.cartItems.add(
-              CartItem(
-                productId: productId,
-                productName: productName,
-                imageUrl: imageUrl,
-                price: double.tryParse(price) ?? 0.0,
-                quantity: 1,
-              ),
-            );
-          } else {
-            existingItem.quantity++;
-          }
-        } catch (e) {
-          print("Error: $e");
+        } else {
+          existingItem.quantity++;
         }
-      });
-    }
+      } catch (e) {
+        print("Error: $e");
+      }
+    });
   }
+}
 
 class ShoppingCart extends StatefulWidget {
   final List<CartItem> cartItems;
@@ -220,75 +206,139 @@ class ShoppingCart extends StatefulWidget {
 }
 
 class _ShoppingCartState extends State<ShoppingCart> {
+  late TextEditingController addressController;
+  DateTime? selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    addressController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    addressController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Shopping Cart"),
       ),
-      body: ListView.builder(
-        itemCount: widget.cartItems.length,
-        itemBuilder: (context, index) {
-          var cartItem = widget.cartItems[index];
-          return Card(
-            margin: EdgeInsets.all(10),
-            child: ListTile(
-              title: Text(cartItem.productName),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("Quantity: ${cartItem.quantity}"),
-                  Text("Price: ${cartItem.price * cartItem.quantity}"),
-                ],
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.remove),
-                    onPressed: () {
-                      setState(() {
-                        if (cartItem.quantity > 0) {
-                          cartItem.quantity--;
-                        } else {
-                          // ถ้าปริมาณเป็น 0 ให้ลบออกจากตะกร้า
-                          widget.cartItems.remove(cartItem);
-                        }
-                      });
-                    },
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: widget.cartItems.length,
+              itemBuilder: (context, index) {
+                var cartItem = widget.cartItems[index];
+                return Card(
+                  margin: EdgeInsets.all(10),
+                  child: ListTile(
+                    title: Text(cartItem.productName),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Quantity: ${cartItem.quantity}"),
+                        Text("Price: ${cartItem.price * cartItem.quantity}"),
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.remove),
+                          onPressed: () {
+                            setState(() {
+                              if (cartItem.quantity > 0) {
+                                cartItem.quantity--;
+                              } else {
+                                widget.cartItems.remove(cartItem);
+                              }
+                            });
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.add),
+                          onPressed: () {
+                            setState(() {
+                              cartItem.quantity++;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () {
-                      setState(() {
-                        cartItem.quantity++;
-                      });
-                    },
-                  ),
-                ],
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextField(
+                      controller: addressController,
+                      decoration: InputDecoration(labelText: 'ที่อยู่'),
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => _selectDate(context),
+                      child: Text("เลือกวันที่"),
+                    ),
+                    SizedBox(height: 10),
+                    if (selectedDate != null)
+                      Text(
+                        "วันที่: ${selectedDate != null ? selectedDate!.toLocal().toString().split(' ')[0] : ''}",
+                        style: TextStyle(fontSize: 10),
+                      ),
+                  ],
+                ),
               ),
             ),
-          );
-        },
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Total: ${calculateTotalPrice()}"),
-              ElevatedButton(
-                onPressed: () {
-                  // สามารถทำการชำระเงินหรือกระบวนการอื่นๆตามต้องการได้ที่นี่
-                },
-                child: Text("Checkout"),
-              ),
-            ],
           ),
-        ),
+          SizedBox(height: 10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Total: ${calculateTotalPrice()}"),
+                ElevatedButton(
+                  onPressed: () {
+                    // ตรวจสอบที่อยู่หรือทำตามกระบวนการ Checkout ต่อไป
+                  },
+                  child: Text("Checkout"),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(Duration(days: 30)),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        selectedDate = pickedDate;
+      });
+    }
   }
 
   double calculateTotalPrice() {
