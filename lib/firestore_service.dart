@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:company/src/bottombar.dart';
 import 'package:company/src_user/bottombar_user.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class FirestoreService {
   static FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -94,6 +95,7 @@ class FirestoreService {
         if (userData['password'] == password) {
           String? role = await getRole(id);
           if (role != null) {
+            Provider.of<UserData>(context, listen: false).setId(id);
             switch (role) {
               case 'Customer':
                 Navigator.push(
@@ -145,4 +147,13 @@ class FirestoreService {
   }
 
   // ไว้เพิ่มฟังก์ชั่นในFirebaseส่วนฐานข้อมูลจะเพิ่มอะไรก็เพิ่มเลย
+}
+
+class UserData extends ChangeNotifier {
+  String? id;
+
+  void setId(String newId) {
+    id = newId;
+    notifyListeners();
+  }
 }

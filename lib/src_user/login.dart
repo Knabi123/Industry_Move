@@ -151,7 +151,6 @@ class _LoginPageState extends State<LoginPage> {
 
                         bool loginSuccess =
                             await FirestoreService.login(id, password, context);
-
                         if (!loginSuccess) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(

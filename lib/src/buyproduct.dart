@@ -1,16 +1,17 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, use_key_in_widget_constructors, library_private_types_in_public_api
+// ignore_for_file: prefer_const_constructors, avoid_print, use_key_in_widget_constructors, library_private_types_in_public_api, non_constant_identifier_names, prefer_const_constructors_in_immutables
 
+import 'package:company/firestore_service.dart';
+import 'package:company/src/Type_User.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 import 'cart.dart';
 import 'CartController.dart';
 import 'package:get/get.dart';
 
 class BuyProduct extends StatefulWidget {
   final String productType;
-
   const BuyProduct({Key? key, required this.productType}) : super(key: key);
-
   @override
   State<BuyProduct> createState() => _BuyProductState();
 }
@@ -18,9 +19,7 @@ class BuyProduct extends StatefulWidget {
 class _BuyProductState extends State<BuyProduct> {
   final CollectionReference _AddProduct =
       FirebaseFirestore.instance.collection('Addproduct');
-
   CartController cartController = Get.find();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +51,6 @@ class _BuyProductState extends State<BuyProduct> {
               itemBuilder: (context, index) {
                 final DocumentSnapshot documentSnapshot =
                     streamSnapshot.data!.docs[index];
-
                 return Card(
                   color: const Color.fromARGB(255, 88, 136, 190),
                   shape: RoundedRectangleBorder(
@@ -134,7 +132,6 @@ class _BuyProductState extends State<BuyProduct> {
                             documentSnapshot['ImageUrl'],
                             documentSnapshot['Price'],
                           );
-
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('เพิ่มลงในตะกร้าแล้ว'),
@@ -198,9 +195,7 @@ class _BuyProductState extends State<BuyProduct> {
 
 class ShoppingCart extends StatefulWidget {
   final List<CartItem> cartItems;
-
   ShoppingCart({required this.cartItems});
-
   @override
   _ShoppingCartState createState() => _ShoppingCartState();
 }
@@ -208,7 +203,6 @@ class ShoppingCart extends StatefulWidget {
 class _ShoppingCartState extends State<ShoppingCart> {
   late TextEditingController addressController;
   DateTime? selectedDate;
-
   @override
   void initState() {
     super.initState();
@@ -314,7 +308,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
                 Text("Total: ${calculateTotalPrice()}"),
                 ElevatedButton(
                   onPressed: () {
-                    // ตรวจสอบที่อยู่หรือทำตามกระบวนการ Checkout ต่อไป
+                    submit();
                   },
                   child: Text("Checkout"),
                 ),
@@ -347,5 +341,34 @@ class _ShoppingCartState extends State<ShoppingCart> {
       total += cartItem.price * cartItem.quantity;
     }
     return total;
+  }
+
+  void submit() {
+    CollectionReference orders = FirebaseFirestore.instance.collection('Order');
+
+    Map<String, dynamic> orderData = {
+      'Location': addressController.text,
+      'Time': selectedDate != null ? selectedDate!.toLocal().toString() : '',
+      'Username': Provider.of<UserData>(context, listen: false).id ??
+          'No ID', // Change this to the actual username of the user
+      'Items': {}, // สร้างโครงสร้างเพื่อเก็บรายการสินค้า
+    };
+
+    for (var cartItem in widget.cartItems) {
+      orderData['Items'][cartItem.productId] = {
+        'ProductName': cartItem.productName,
+        'Amount': cartItem.quantity,
+        'Price': cartItem.price * cartItem.quantity,
+      };
+    }
+
+    orders.add(orderData).then((value) {
+      print("Order added successfully!");
+    }).catchError((error) {
+      print("Failed to add order: $error");
+    });
+
+    widget.cartItems.clear();
+    setState(() {});
   }
 }
