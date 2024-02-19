@@ -326,14 +326,36 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
       String driverId,
       String driverPassword,
       String imageUrl) async {
-    await FirebaseFirestore.instance.collection('drivers').add({
-      'name': name,
-      'carid': carid,
-      'licensePlate': licensePlate,
-      'driverId': driverId,
-      'driverPassword': driverPassword,
-      'imageUrl': imageUrl,
-    });
+    if (name.isNotEmpty &&
+        carid.isNotEmpty &&
+        carid.length <= 8 &&
+        licensePlate.isNotEmpty &&
+        licensePlate.length <= 8 &&
+        driverId.isNotEmpty &&
+        driverPassword.isNotEmpty &&
+        driverPassword.length >= 8) {
+      await FirebaseFirestore.instance.collection('drivers').add({
+        'name': name,
+        'carid': carid,
+        'licensePlate': licensePlate,
+        'driverId': driverId,
+        'driverPassword': driverPassword,
+        'imageUrl': imageUrl,
+      });
+      await FirebaseFirestore.instance.collection('User').add({
+        'id': driverId,
+        'password': driverPassword,
+        'name': name,
+        'role': 'Driver',
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill in all fields correctly.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> _updateDriverInFirestore(
@@ -344,17 +366,33 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
       String driverId,
       String driverPassword,
       String imageUrl) async {
-    await FirebaseFirestore.instance
-        .collection('drivers')
-        .doc(driver.id)
-        .update({
-      'name': name,
-      'carid': carid,
-      'licensePlate': licensePlate,
-      'driverId': driverId,
-      'driverPassword': driverPassword,
-      'imageUrl': imageUrl,
-    });
+    if (name.isNotEmpty &&
+        carid.isNotEmpty &&
+        carid.length <= 8 &&
+        licensePlate.isNotEmpty &&
+        licensePlate.length <= 8 &&
+        driverId.isNotEmpty &&
+        driverPassword.isNotEmpty &&
+        driverPassword.length >= 8) {
+      await FirebaseFirestore.instance
+          .collection('drivers')
+          .doc(driver.id)
+          .update({
+        'name': name,
+        'carid': carid,
+        'licensePlate': licensePlate,
+        'driverId': driverId,
+        'driverPassword': driverPassword,
+        'imageUrl': imageUrl,
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please fill in all fields correctly.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> _deleteDriverFromFirestore(Driver driver) {
