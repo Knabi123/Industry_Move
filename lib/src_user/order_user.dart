@@ -1,6 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors, camel_case_types, sort_child_properties_last, prefer_const_constructors, non_constant_identifier_names
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:company/firestore_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'order_detail_user.dart';
 
@@ -37,7 +39,11 @@ class Order_user extends StatelessWidget {
           elevation: 4.0,
         ),
         body: StreamBuilder<QuerySnapshot>(
-            stream: _Order.snapshots(),
+            stream: _Order.where('Username',
+                    isEqualTo:
+                        Provider.of<UserData>(context, listen: false).id ??
+                            'No ID')
+                .snapshots(),
             builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
               if (streamSnapshot.hasData) {
                 return ListView.builder(
