@@ -475,11 +475,24 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
     }
   }
 
-  Future<void> _deleteDriverFromFirestore(Driver driver) {
-    return FirebaseFirestore.instance
+  Future<void> _deleteDriverFromFirestore(Driver driver) async {
+    // Delete driver from 'drivers' collection
+    await FirebaseFirestore.instance
         .collection('drivers')
         .doc(driver.id)
         .delete();
+
+    // Delete driver from 'User' collection
+    QuerySnapshot userQuerySnapshot = await FirebaseFirestore.instance
+        .collection('User')
+        .where('id', isEqualTo: driver.driverId)
+        .get();
+    if (userQuerySnapshot.docs.isNotEmpty) {
+      await FirebaseFirestore.instance
+          .collection('User')
+          .doc(userQuerySnapshot.docs.first.id)
+          .delete();
+    }
   }
 
   @override
