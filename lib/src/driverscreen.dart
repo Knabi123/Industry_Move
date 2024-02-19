@@ -319,6 +319,17 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
     );
   }
 
+  Future<bool> _checkUserIdExists(String id) async {
+    // Check if id exists in User collection
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('User')
+        .where('id', isEqualTo: id)
+        .get();
+
+    // If querySnapshot has data, then id exists
+    return querySnapshot.docs.isNotEmpty;
+  }
+
   Future<void> _addDriverToFirestore(
       String name,
       String carid,
@@ -326,6 +337,7 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
       String driverId,
       String driverPassword,
       String imageUrl) async {
+    // Check if all fields are filled correctly
     if (name.isNotEmpty &&
         carid.isNotEmpty &&
         carid.length <= 8 &&
@@ -334,21 +346,42 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
         driverId.isNotEmpty &&
         driverPassword.isNotEmpty &&
         driverPassword.length >= 8) {
-      await FirebaseFirestore.instance.collection('drivers').add({
-        'name': name,
-        'carid': carid,
-        'licensePlate': licensePlate,
-        'driverId': driverId,
-        'driverPassword': driverPassword,
-        'imageUrl': imageUrl,
-      });
-      await FirebaseFirestore.instance.collection('User').add({
-        'id': driverId,
-        'password': driverPassword,
-        'name': name,
-        'role': 'Driver',
-      });
+      // Check if driverId exists in database
+      bool driverExists = await _checkDriverExists(driverId);
+
+      // Check if id exists in User collection
+      bool idExists = await _checkUserIdExists(driverId);
+
+      if (!driverExists && !idExists) {
+        // If driverId does not exist and id does not exist, add driver to Firestore
+        await FirebaseFirestore.instance.collection('drivers').add({
+          'name': name,
+          'carid': carid,
+          'licensePlate': licensePlate,
+          'driverId': driverId,
+          'driverPassword': driverPassword,
+          'imageUrl': imageUrl,
+        });
+
+        // Also add driver information to User collection
+        await FirebaseFirestore.instance.collection('User').add({
+          'id': driverId,
+          'password': driverPassword,
+          'name': name,
+          'role': 'Driver',
+        });
+      } else {
+        // If driverId or id already exists, show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Driver ID or ID already exists. Please choose another one.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     } else {
+      // If any field is not filled correctly, show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please fill in all fields correctly.'),
@@ -356,6 +389,17 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
         ),
       );
     }
+  }
+
+  Future<bool> _checkDriverExists(String driverId) async {
+    // Check if driverId exists in database
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('drivers')
+        .where('driverId', isEqualTo: driverId)
+        .get();
+
+    // If querySnapshot has data, then driverId exists
+    return querySnapshot.docs.isNotEmpty;
   }
 
   Future<void> _updateDriverInFirestore(
@@ -366,6 +410,7 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
       String driverId,
       String driverPassword,
       String imageUrl) async {
+    // Check if all fields are filled correctly
     if (name.isNotEmpty &&
         carid.isNotEmpty &&
         carid.length <= 8 &&
@@ -374,18 +419,53 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
         driverId.isNotEmpty &&
         driverPassword.isNotEmpty &&
         driverPassword.length >= 8) {
-      await FirebaseFirestore.instance
-          .collection('drivers')
-          .doc(driver.id)
-          .update({
-        'name': name,
-        'carid': carid,
-        'licensePlate': licensePlate,
-        'driverId': driverId,
-        'driverPassword': driverPassword,
-        'imageUrl': imageUrl,
-      });
+      // Check if driverId exists in database
+      bool driverExists = await _checkDriverExists(driverId);
+
+      // Check if id exists in User collection
+      bool idExists = await _checkUserIdExists(driverId);
+
+      if ((!driverExists || driverId == driver.driverId) && !idExists) {
+        // If driverId does not exist or is the same as before, update driver in Firestore
+        await FirebaseFirestore.instance
+            .collection('drivers')
+            .doc(driver.id)
+            .update({
+          'name': name,
+          'carid': carid,
+          'licensePlate': licensePlate,
+          'driverId': driverId,
+          'driverPassword': driverPassword,
+          'imageUrl': imageUrl,
+        });
+
+        // Also update driver information in User collection
+        QuerySnapshot userQuerySnapshot = await FirebaseFirestore.instance
+            .collection('User')
+            .where('id', isEqualTo: driver.driverId)
+            .get();
+        if (userQuerySnapshot.docs.isNotEmpty) {
+          await FirebaseFirestore.instance
+              .collection('User')
+              .doc(userQuerySnapshot.docs.first.id)
+              .update({
+            'id': driverId,
+            'password': driverPassword,
+            'name': name,
+          });
+        }
+      } else {
+        // If driverId or id already exists, show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Driver ID or ID already exists. Please choose another one.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     } else {
+      // If any field is not filled correctly, show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Please fill in all fields correctly.'),
