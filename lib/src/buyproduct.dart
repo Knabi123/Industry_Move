@@ -349,9 +349,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
     Map<String, dynamic> orderData = {
       'Location': addressController.text,
       'Time': selectedDate != null ? selectedDate!.toLocal().toString() : '',
-      'Username': Provider.of<UserData>(context, listen: false).id ??
-          'No ID', // Change this to the actual username of the user
-      'Items': {}, // สร้างโครงสร้างเพื่อเก็บรายการสินค้า
+      'Username': Provider.of<UserData>(context, listen: false).id ?? 'No ID',
+      'Items': {},
     };
 
     for (var cartItem in widget.cartItems) {
