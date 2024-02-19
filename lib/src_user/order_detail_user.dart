@@ -114,13 +114,13 @@ class _MyOrderState extends State<OrderDetailPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
                 SizedBox(height: 10),
-                ElevatedButton.icon(
-                  style: ButtonStyle(
-                      minimumSize: MaterialStateProperty.all(Size(300, 40))),
-                  label: Text('${orderData['Slip']}'),
-                  icon: Icon(Icons.image),
-                  onPressed: () {},
-                ),
+                // ElevatedButton.icon(
+                //   style: ButtonStyle(
+                //       minimumSize: MaterialStateProperty.all(Size(300, 40))),
+                //   label: Text('${orderData['Slip']}'),
+                //   icon: Icon(Icons.image),
+                //   onPressed: () {},
+                // ),
                 SizedBox(height: 15),
                 Text(
                   'วันที่ต้องการให้จัดส่ง : ${orderData['Time']}',

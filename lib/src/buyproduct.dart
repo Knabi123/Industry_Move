@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, use_key_in_widget_constructors, library_private_types_in_public_api, non_constant_identifier_names, prefer_const_constructors_in_immutables
 
+import 'dart:math';
+
 import 'package:company/firestore_service.dart';
 import 'package:company/src/Type_User.dart';
 import 'package:flutter/material.dart';
@@ -344,30 +346,38 @@ class _ShoppingCartState extends State<ShoppingCart> {
   }
 
   void submit() {
+    // เชื่อมต่อกับ collection 'Order' ใน Firestore
     CollectionReference orders = FirebaseFirestore.instance.collection('Order');
-
-    Map<String, dynamic> orderData = {
-      'Location': addressController.text,
-      'Time': selectedDate != null ? selectedDate!.toLocal().toString() : '',
-      'Username': Provider.of<UserData>(context, listen: false).id ?? 'No ID',
-      'Items': {},
-    };
-
+    var random = Random();
+    String OrderId = '';
+    for (var i = 0; i < 6; i++) {
+      OrderId += (random.nextInt(10)).toString();
+    }
+    // วนลูปเพื่อสร้างเอกสารสำหรับแต่ละสินค้าในตะกร้า
     for (var cartItem in widget.cartItems) {
-      orderData['Items'][cartItem.productId] = {
+      orders.add({
+        'OrderID': OrderId,
+        'ProductID': cartItem.productId,
         'ProductName': cartItem.productName,
         'Amount': cartItem.quantity,
         'Price': cartItem.price * cartItem.quantity,
-      };
+        'Location': addressController.text, // ใช้ค่าจาก addressController
+        'Time': selectedDate != null
+            ? selectedDate!.toLocal().toString()
+            : '', // ใช้ค่าจาก selectedDate
+        'Username': Provider.of<UserData>(context, listen: false).id ??
+            'No ID', // ใส่ชื่อผู้ใช้ที่ต้องการ
+      }).then((value) {
+        print("Order added successfully!");
+      }).catchError((error) {
+        print("Failed to add order: $error");
+      });
     }
 
-    orders.add(orderData).then((value) {
-      print("Order added successfully!");
-    }).catchError((error) {
-      print("Failed to add order: $error");
-    });
-
+    // ล้างตะกร้าหลังจากที่ส่งคำสั่งซื้อเสร็จ
     widget.cartItems.clear();
-    setState(() {});
+    setState(() {
+      // ต้อง setState เพื่อให้ UI รีเฟรชแสดงว่าตะกร้าว่าง
+    });
   }
 }

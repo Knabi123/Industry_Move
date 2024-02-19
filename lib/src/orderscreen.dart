@@ -53,8 +53,7 @@ class OrderScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      Orderdetail()), // สมมติว่าหน้า AddProduct มีชื่อว่า AddProduct
+                                  builder: (context) => Orderdetail()),
                             );
                           },
                           child: ListTile(
@@ -100,9 +99,11 @@ class OrderScreen extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text("Amount : "),
-                                      Text(documentSnapshot['Amount']),
-                                      Text("   Price :  "),
-                                      Text(documentSnapshot['Price']),
+                                      Text(
+                                          "Amount : ${documentSnapshot['Amount'].toString()}"),
+                                      Text("Price :  "),
+                                      Text(
+                                          "Price : ${documentSnapshot['Price'].toString()}"),
                                     ],
                                   ),
                                 ]),

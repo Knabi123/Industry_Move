@@ -103,9 +103,11 @@ class Order_user extends StatelessWidget {
                                   Row(
                                     children: [
                                       Text("Amount : "),
-                                      Text(documentSnapshot['Amount']),
+                                      Text(
+                                          "Amount : ${documentSnapshot['Amount'].toString()}"),
                                       Text("   Price :  "),
-                                      Text(documentSnapshot['Price']),
+                                      Text(
+                                          "Price : ${documentSnapshot['Price'].toString()}"),
                                     ],
                                   ),
                                 ]),
