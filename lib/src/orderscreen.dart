@@ -53,7 +53,8 @@ class OrderScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => Orderdetail()),
+                                  builder: (context) =>
+                                      Orderdetail(orderData: documentSnapshot)),
                             );
                           },
                           child: ListTile(

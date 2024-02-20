@@ -1,21 +1,54 @@
-// ignore_for_file: prefer_const_constructors, deprecated_member_use
+// ignore_for_file: prefer_const_constructors, deprecated_member_use, use_build_context_synchronously
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Orderdetail extends StatefulWidget {
-  const Orderdetail({Key? key}) : super(key: key);
+  final DocumentSnapshot orderData;
+  const Orderdetail({Key? key, required this.orderData}) : super(key: key);
 
   @override
-  State<Orderdetail> createState() => _MyOrderState();
+  State<Orderdetail> createState() => _MyOrderState(orderData: orderData);
 }
 
 class _MyOrderState extends State<Orderdetail> {
   late Stream<QuerySnapshot> _orderStream;
+  final DocumentSnapshot orderData;
+//   Future<String> getImageURL(String imageName) async {
+//   try {
+//     // ดึง URL ของรูปภาพจาก Firebase Storage
+//     String imageURL = await FirebaseStorage.instance
+//         .ref()
+//         .child('path/to/Slip/$imageName')
+//         .getDownloadURL();
 
+//     return imageURL;
+//   } catch (e) {
+//     print('Error getting image URL: $e');
+//     return ''; // หรือคืนค่าอื่นที่คุณต้องการให้เหมาะสม
+//   }
+// }
+  _MyOrderState({required this.orderData});
   @override
   void initState() {
     super.initState();
     _orderStream = FirebaseFirestore.instance.collection('Order').snapshots();
+  }
+
+  void _showImagePopup(BuildContext context, String imageURL) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Slip'),
+            ),
+            body: Center(
+              child: Image.network(imageURL),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -45,7 +78,7 @@ class _MyOrderState extends State<Orderdetail> {
             }
 
             // Assuming you have only one document in the 'Order' collection
-            var orderData = snapshot.data!.docs.first;
+            var orderData = widget.orderData;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +158,11 @@ class _MyOrderState extends State<Orderdetail> {
                       minimumSize: MaterialStateProperty.all(Size(300, 40))),
                   label: Text('${orderData['Slip']}'),
                   icon: Icon(Icons.image),
-                  onPressed: () {},
+                  onPressed: () async {
+                    String imageURL = await orderData['Slip'];
+                    _showImagePopup(context, imageURL);
+                    // จากนั้นสามารถใช้ imageURL เพื่อแสดงรูปภาพ หรือทำอย่างอื่นต่อไป
+                  },
                 ),
                 SizedBox(height: 15),
                 Text(

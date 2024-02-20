@@ -337,7 +337,6 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
       String driverId,
       String driverPassword,
       String imageUrl) async {
-    // Check if all fields are filled correctly
     if (name.isNotEmpty &&
         carid.isNotEmpty &&
         carid.length <= 8 &&
@@ -346,7 +345,6 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
         driverId.isNotEmpty &&
         driverPassword.isNotEmpty &&
         driverPassword.length >= 8) {
-      // Check if driverId exists in database
       bool driverExists = await _checkDriverExists(driverId);
 
       // Check if id exists in User collection

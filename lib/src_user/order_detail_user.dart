@@ -1,22 +1,57 @@
-// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_const_constructors
+// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_const_constructors, avoid_print, no_logic_in_create_state
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  const OrderDetailPage({Key? key}) : super(key: key);
-
+  final DocumentSnapshot orderData;
+  const OrderDetailPage({Key? key, required this.orderData}) : super(key: key);
   @override
-  State<OrderDetailPage> createState() => _MyOrderState();
+  State<OrderDetailPage> createState() => _MyOrderState(orderData: orderData);
 }
 
 class _MyOrderState extends State<OrderDetailPage> {
   late Stream<QuerySnapshot> _orderStream;
-
+  late File _imageFile;
+  final DocumentSnapshot orderData;
+  _MyOrderState({required this.orderData});
   @override
   void initState() {
     super.initState();
     _orderStream = FirebaseFirestore.instance.collection('Order').snapshots();
+  }
+
+  Future<void> _uploadImage([DocumentSnapshot? documentSnapshot]) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+
+      // Upload image to Firebase Storage
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('Slip/${DateTime.now().millisecondsSinceEpoch}.jpg');
+      await storageRef.putFile(_imageFile);
+
+      // Get the download URL
+      final Slip = await storageRef.getDownloadURL();
+
+      // Update Firestore document with the image URL
+      await FirebaseFirestore.instance
+          .collection('Order')
+          .doc('Fc4ynHcHzsQavBjPGm86')
+          .update({
+        'Slip': Slip,
+      });
+    } else {
+      print('No image selected.');
+    }
   }
 
   @override
@@ -46,7 +81,7 @@ class _MyOrderState extends State<OrderDetailPage> {
             }
 
             // Assuming you have only one document in the 'Order' collection
-            var orderData = snapshot.data!.docs.first;
+            var orderData = widget.orderData;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,34 +128,44 @@ class _MyOrderState extends State<OrderDetailPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 Text(
                   'ผู้สั่งสินค้า : ${orderData['Username']}',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: 15),
                 Text(
                   'Address',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 10),
                 Text(
                   '${orderData['Location']}',
                   style: TextStyle(fontSize: 16),
                 ),
-                SizedBox(height: 30),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   'หลักฐานการชำระเงิน',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
+                Center(
+                    child: Image.asset(
+                  'assets/images/qrcode.png',
+                  height: 200,
+                )),
                 SizedBox(height: 10),
-                // ElevatedButton.icon(
-                //   style: ButtonStyle(
-                //       minimumSize: MaterialStateProperty.all(Size(300, 40))),
-                //   label: Text('${orderData['Slip']}'),
-                //   icon: Icon(Icons.image),
-                //   onPressed: () {},
-                // ),
+                SizedBox(height: 10),
+                Center(
+                  child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                        minimumSize: MaterialStateProperty.all(Size(300, 40))),
+                    label: Text('slip'),
+                    icon: Icon(Icons.image),
+                    onPressed: _uploadImage,
+                  ),
+                ),
                 SizedBox(height: 15),
                 Text(
                   'วันที่ต้องการให้จัดส่ง : ${orderData['Time']}',

@@ -13,7 +13,6 @@ void main() {
 class Order_user extends StatelessWidget {
   final CollectionReference _Order =
       FirebaseFirestore.instance.collection('Order');
-  // final List<String> orderList = ["Order 1", "Order 2", "Order 3", "Order 4"];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +62,8 @@ class Order_user extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => OrderDetailPage()),
+                                  builder: (context) => OrderDetailPage(
+                                      orderData: documentSnapshot)),
                             );
                           },
                           child: ListTile(
