@@ -364,6 +364,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
         'Location': addressController.text, // ใช้ค่าจาก addressController
         'Time': selectedDate != null ? selectedDate!.toLocal().toString() : '',
         'Username': Provider.of<UserData>(context, listen: false).id ?? 'No ID',
+        'Slip': '',
       }).then((value) {
         print("Order added successfully!");
       }).catchError((error) {
