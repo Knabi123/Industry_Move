@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, use_key_in_widget_constructors, library_private_types_in_public_api, non_constant_identifier_names, prefer_const_constructors_in_immutables
+// ignore_for_file: prefer_const_constructors, avoid_print, use_key_in_widget_constructors, library_private_types_in_public_api, non_constant_identifier_names, prefer_const_constructors_in_immutables, unused_import
 
 import 'dart:math';
 
@@ -346,14 +346,42 @@ class _ShoppingCartState extends State<ShoppingCart> {
   }
 
   void submit() {
-    // เชื่อมต่อกับ collection 'Order' ใน Firestore
     CollectionReference orders = FirebaseFirestore.instance.collection('Order');
     var random = Random();
     String OrderId = '';
+    if (widget.cartItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Please add at least one item to the cart.'),
+          backgroundColor: Color.fromARGB(255, 106, 221, 236),
+        ),
+      );
+      return;
+    }
+    if (addressController.text.isEmpty || addressController.text.length < 10) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('Please enter a valid address (minimum 10 characters).'),
+          backgroundColor: Color.fromARGB(255, 106, 221, 236),
+        ),
+      );
+      return;
+    }
+    if (selectedDate == null ||
+        selectedDate!.isBefore(DateTime.now().add(Duration(days: 3)))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content:
+              Text('Please select a valid date (at least 3 days from now).'),
+          backgroundColor: Color.fromARGB(202, 247, 0, 222),
+        ),
+      );
+      return;
+    }
     for (var i = 0; i < 6; i++) {
       OrderId += (random.nextInt(10)).toString();
     }
-    // วนลูปเพื่อสร้างเอกสารสำหรับแต่ละสินค้าในตะกร้า
     for (var cartItem in widget.cartItems) {
       orders.add({
         'OrderID': OrderId,
@@ -372,10 +400,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
       });
     }
 
-    // ล้างตะกร้าหลังจากที่ส่งคำสั่งซื้อเสร็จ
     widget.cartItems.clear();
-    setState(() {
-      // ต้อง setState เพื่อให้ UI รีเฟรชแสดงว่าตะกร้าว่าง
-    });
+    setState(() {});
   }
 }

@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_const_constructors, avoid_print, no_logic_in_create_state
+// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_const_constructors, avoid_print, no_logic_in_create_state, non_constant_identifier_names
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';

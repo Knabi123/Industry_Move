@@ -1,10 +1,30 @@
-// ignore_for_file: non_constant_identifier_names, unused_element, prefer_const_constructors, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously, unused_field, no_leading_underscores_for_local_identifiers, avoid_print
+// ignore_for_file: non_constant_identifier_names, unused_element, prefer_const_constructors, unused_local_variable, unnecessary_null_comparison, use_build_context_synchronously, unused_field, no_leading_underscores_for_local_identifiers, avoid_print, prefer_contains
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+
+class NumericTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Allow only digits and a single dot
+    String newText = newValue.text.replaceAll(RegExp(r'[^0-9\.]'), '');
+    // Allow only one dot
+    if (newText.indexOf('.') != -1) {
+      newText = newText.replaceAll(RegExp(r'\.'), '');
+      newText =
+          '${newText.substring(0, newText.length - 2)}.${newText.substring(newText.length - 2)}';
+    }
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
+  }
+}
 
 class AddProduct extends StatefulWidget {
   final String productType;
@@ -70,16 +90,25 @@ class _AddProductState extends State<AddProduct> {
                       controller: _SizeController,
                       decoration: const InputDecoration(
                           labelText: "Size", hintText: "Size"),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [NumericTextFormatter()],
                     ),
                     TextField(
                       controller: _WeightController,
                       decoration: const InputDecoration(
                           labelText: "Weight", hintText: "Weight"),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [NumericTextFormatter()],
                     ),
                     TextField(
                       controller: _PriceController,
                       decoration: const InputDecoration(
                           labelText: "Price", hintText: "Price"),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [NumericTextFormatter()],
                     ),
                     TextField(
                       controller: _UnitController,
@@ -135,7 +164,13 @@ class _AddProductState extends State<AddProduct> {
                       imageUrl = await ref.getDownloadURL();
                     }
 
-                    if (ProductID != null) {
+                    if (ProductID.isNotEmpty &&
+                        ProductName.isNotEmpty &&
+                        Size.isNotEmpty &&
+                        Weight.isNotEmpty &&
+                        Price.isNotEmpty &&
+                        Unit.isNotEmpty &&
+                        Detail.isNotEmpty) {
                       await _AddProduct.doc(documentSnapshot?.id).set({
                         "ProductID": ProductID,
                         "ProductName": ProductName,
@@ -267,7 +302,13 @@ class _AddProductState extends State<AddProduct> {
                       final String Price = _PriceController.text;
                       final String Unit = _UnitController.text;
                       final String Detail = _DetailController.text;
-                      if (ProductID.isNotEmpty) {
+                      if (ProductID.isNotEmpty &&
+                          ProductName.isNotEmpty &&
+                          Size.isNotEmpty &&
+                          Weight.isNotEmpty &&
+                          Price.isNotEmpty &&
+                          Unit.isNotEmpty &&
+                          Detail.isNotEmpty) {
                         // Upload image if available
                         String imageUrl = '';
                         if (documentSnapshot != null) {
