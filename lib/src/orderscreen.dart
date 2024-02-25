@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last, non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:company/src/orderdetail.dart';
+import 'package:company/src_user/login.dart';
 import 'package:flutter/material.dart';
 
 class OrderScreen extends StatelessWidget {
@@ -12,25 +14,44 @@ class OrderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 176, 42, 220),
-          centerTitle: true,
-          title: const Text(
+          backgroundColor: Colors.deepPurple[300],
+          elevation: 0,
+          title: Text(
             'My Orders',
-            style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.menu),
-            color: Colors.white,
-            onPressed: () {},
-          ),
-          bottom: PreferredSize(
-            child: Container(
-              color: Colors.grey,
-              height: 1.0,
+            style: TextStyle(
+              fontSize: 24, // ตั้งค่าขนาดตัวอักษร
+              fontWeight: FontWeight.bold, // ตั้งค่าน้ำหนักตัวอักษร
+              letterSpacing: 1.5, // ตั้งค่าระยะห่างระหว่างตัวอักษร
             ),
-            preferredSize: Size.fromHeight(1.0),
           ),
-          elevation: 4.0,
+          centerTitle: true, // ทำให้ Title อยู่ตรงกลาง
+        ),
+        drawer: Drawer(
+          child: Container(
+            color: Colors.deepPurple[200],
+            child: ListView(
+              children: [
+                DrawerHeader(
+                  child: Center(
+                      child: Text(
+                    'L O G O',
+                    style: TextStyle(fontSize: 35),
+                  )),
+                ),
+                ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text(
+                    'Logout',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  },
+                ),
+              ],
+            ),
+          ),
         ),
         body: StreamBuilder<QuerySnapshot>(
             stream: _Order.snapshots(),

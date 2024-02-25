@@ -1,7 +1,7 @@
-// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, use_build_context_synchronously, avoid_function_literals_in_foreach_calls
-
+// ignore_for_file: library_private_types_in_public_api, prefer_const_constructors, use_key_in_widget_constructors, avoid_print, use_build_context_synchronously, avoid_function_literals_in_foreach_calls, unused_element
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:company/src_user/login.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -497,18 +497,44 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Driver'),
-        centerTitle: true,
-        backgroundColor: Color(0xFF864AF9),
-        elevation: 2.0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              _showAddDialog();
-            },
+        backgroundColor: Colors.deepPurple[300],
+        elevation: 0,
+        title: Text(
+          'Driver',
+          style: TextStyle(
+            fontSize: 24, // ตั้งค่าขนาดตัวอักษร
+            fontWeight: FontWeight.bold, // ตั้งค่าน้ำหนักตัวอักษร
+            letterSpacing: 1.5, // ตั้งค่าระยะห่างระหว่างตัวอักษร
           ),
-        ],
+        ),
+        centerTitle: true, // ทำให้ Title อยู่ตรงกลาง
+      ),
+      drawer: Drawer(
+        child: Container(
+          color: Colors.deepPurple[200],
+          child: ListView(
+            children: [
+              DrawerHeader(
+                child: Center(
+                    child: Text(
+                  'L O G O',
+                  style: TextStyle(fontSize: 35),
+                )),
+              ),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text(
+                  'Logout',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+              ),
+            ],
+          ),
+        ),
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('drivers').snapshots(),
@@ -533,6 +559,14 @@ class _DriverDetailPageState extends State<DriverDetailPage> {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddDialog,
+        backgroundColor: Colors.white,
+        child: Icon(
+          Icons.add,
+          color: Colors.deepPurple,
+        ),
       ),
     );
   }

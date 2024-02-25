@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, use_key_in_widget_constructors, library_private_types_in_public_api, non_constant_identifier_names, prefer_const_constructors_in_immutables, unused_import
+// ignore_for_file: prefer_const_constructors, avoid_print, use_key_in_widget_constructors, library_private_types_in_public_api, non_constant_identifier_names, prefer_const_constructors_in_immutables, unused_import, deprecated_member_use, prefer_const_literals_to_create_immutables
 
 import 'dart:math';
 
@@ -221,7 +221,16 @@ class _ShoppingCartState extends State<ShoppingCart> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Shopping Cart"),
+        backgroundColor: Colors.deepPurple[300],
+        elevation: 0,
+        title: Text(
+          'Shopping Cart',
+          style: TextStyle(
+            fontSize: 24, // ตั้งค่าขนาดตัวอักษร
+            fontWeight: FontWeight.bold, // ตั้งค่าน้ำหนักตัวอักษร
+            letterSpacing: 1.5, // ตั้งค่าระยะห่างระหว่างตัวอักษร
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -275,6 +284,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Card(
+              color: Colors.deepPurple,
               elevation: 4,
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
@@ -283,12 +293,59 @@ class _ShoppingCartState extends State<ShoppingCart> {
                   children: [
                     TextField(
                       controller: addressController,
-                      decoration: InputDecoration(labelText: 'ที่อยู่'),
+                      decoration: InputDecoration(
+                        labelText: 'Address',
+                        labelStyle: TextStyle(
+                          color: Colors.black,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(
+                            color: Colors.black, // สีกรอบดำเข้ม
+                          ),
+                        ),
+                        prefixIcon: Icon(
+                          Icons.location_on_sharp,
+                          color: Colors.red,
+                        ),
+                        filled: true,
+                        fillColor: Colors.deepPurple[200],
+                      ),
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
                     ),
                     SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => _selectDate(context),
-                      child: Text("เลือกวันที่"),
+                      style: ElevatedButton.styleFrom(
+                        primary: Color.fromARGB(
+                            255, 201, 176, 230), // เปลี่ยนสีพื้นหลังของปุ่ม
+                        elevation:
+                            4, // เพิ่ม elevation เพื่อให้เห็นกรอบสีดำเข้มได้ชัดเจน
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                          side: BorderSide(
+                            color: Colors.black, // สีกรอบดำเข้ม
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons
+                                .calendar_month, // ใส่ไอคอน calendar_month ในปุ่ม
+                            size: 18, // ปรับขนาดไอคอน
+                          ),
+                          SizedBox(
+                              width: 8), // เพิ่มระยะห่างระหว่างไอคอนกับ Text
+                          Text(
+                            "Choose Date",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: 10),
                     if (selectedDate != null)
@@ -401,6 +458,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
     }
 
     widget.cartItems.clear();
-    setState(() {});
+    setState(() {
+      Navigator.of(context).pop();
+    });
   }
 }

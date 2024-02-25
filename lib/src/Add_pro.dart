@@ -1,7 +1,8 @@
-// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, non_constant_identifier_names, use_build_context_synchronously, file_names, camel_case_types, unused_element
+// ignore_for_file: unnecessary_null_comparison, prefer_const_constructors, non_constant_identifier_names, use_build_context_synchronously, file_names, camel_case_types, unused_element, sort_child_properties_last, deprecated_member_use
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:company/src/addproduct.dart';
+import 'package:company/src_user/login.dart';
 import 'package:flutter/material.dart';
 
 class Add_Pro extends StatefulWidget {
@@ -20,31 +21,44 @@ class _Add_ProState extends State<Add_Pro> {
         isScrollControlled: true,
         context: context,
         builder: (BuildContext ctx) {
-          return Padding(
-            padding: EdgeInsets.only(
+          return Container(
+            color: Colors.deepPurple[200],
+            child: Padding(
+              padding: EdgeInsets.only(
                 top: 20,
                 right: 20,
                 left: 20,
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(
-                  child: Text(
-                    "Add Type",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: Text(
+                      "Add Type",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
                   ),
-                ),
-                TextField(
-                  controller: _TypeController,
-                  decoration: const InputDecoration(
-                      labelText: "Type", hintText: "Add Type"),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
+                  SizedBox(height: 20),
+                  TextField(
+                    controller: _TypeController,
+                    decoration: InputDecoration(
+                      labelText: "Type",
+                      hintText: "Add Type",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: Colors.black, // สีกรอบดำเข้ม
+                        ),
+                      ),
+                      filled: true, // เติมสีพื้นหลัง
+                      fillColor: Colors.white, // สีพื้นหลัง
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
                     onPressed: () async {
                       final String Type = _TypeController.text;
                       if (Type != null) {
@@ -54,8 +68,20 @@ class _Add_ProState extends State<Add_Pro> {
                         Navigator.of(context).pop();
                       }
                     },
-                    child: const Text("Create"))
-              ],
+                    child: Text(
+                      "Create",
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color.fromARGB(
+                          255, 174, 131, 230), // เปลี่ยนสีพื้นหลังของปุ่ม
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         });
@@ -123,11 +149,43 @@ class _Add_ProState extends State<Add_Pro> {
     return Scaffold(
       backgroundColor: Colors.purple[100],
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        centerTitle: true,
-        title: const Text(
-          "Home",
-          style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+        backgroundColor: Colors.deepPurple[300],
+        elevation: 0,
+        title: Text(
+          'Home',
+          style: TextStyle(
+            fontSize: 24, // ตั้งค่าขนาดตัวอักษร
+            fontWeight: FontWeight.bold, // ตั้งค่าน้ำหนักตัวอักษร
+            letterSpacing: 1.5, // ตั้งค่าระยะห่างระหว่างตัวอักษร
+          ),
+        ),
+        centerTitle: true, // ทำให้ Title อยู่ตรงกลาง
+      ),
+      drawer: Drawer(
+        child: Container(
+          color: Colors.deepPurple[200],
+          child: ListView(
+            children: [
+              DrawerHeader(
+                child: Center(
+                    child: Text(
+                  'L O G O',
+                  style: TextStyle(fontSize: 35),
+                )),
+              ),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: Text(
+                  'Logout',
+                  style: TextStyle(fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: StreamBuilder(

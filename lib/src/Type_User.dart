@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types, file_names, prefer_const_constructors, non_constant_identifier_names, unused_import, unused_local_variable, use_key_in_widget_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:company/src_user/login.dart';
 import 'buyproduct.dart';
 import 'cart.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,44 @@ class _Type_UserState extends State<Type_User> {
     return GetMaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("Home"),
+          backgroundColor: Colors.deepPurple[300],
+          elevation: 0,
+          title: Text(
+            'Home',
+            style: TextStyle(
+              fontSize: 24, // ตั้งค่าขนาดตัวอักษร
+              fontWeight: FontWeight.bold, // ตั้งค่าน้ำหนักตัวอักษร
+              letterSpacing: 1.5, // ตั้งค่าระยะห่างระหว่างตัวอักษร
+            ),
+          ),
+          centerTitle: true, // ทำให้ Title อยู่ตรงกลาง
+        ),
+        drawer: Drawer(
+          child: Container(
+            color: Colors.deepPurple[200],
+            child: ListView(
+              children: [
+                DrawerHeader(
+                  child: Center(
+                      child: Text(
+                    'L O G O',
+                    style: TextStyle(fontSize: 35),
+                  )),
+                ),
+                ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text(
+                    'Logout',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  },
+                ),
+              ],
+            ),
+          ),
         ),
         body: StreamBuilder(
           stream: _Addtype.snapshots(),

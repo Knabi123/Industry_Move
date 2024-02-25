@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:company/src/bottombar.dart';
+import 'package:company/src/orderdriver.dart';
 import 'package:company/src_user/bottombar_user.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -117,7 +118,7 @@ class FirestoreService {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BottomBar(),
+                    builder: (context) => DriverOrderScreen(),
                   ),
                 );
                 break;
