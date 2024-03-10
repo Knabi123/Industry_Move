@@ -175,7 +175,7 @@ class _MyOrderState extends State<OrderDetailPage> {
                 GestureDetector(
                   onTap: () {},
                   child: Text(
-                    'สถานะออเดอร์',
+                    'Status Order: ${orderData['status']}',
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

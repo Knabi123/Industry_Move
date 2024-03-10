@@ -406,6 +406,7 @@ class _ShoppingCartState extends State<ShoppingCart> {
     CollectionReference orders = FirebaseFirestore.instance.collection('Order');
     var random = Random();
     String OrderId = '';
+    DateTime now = DateTime.now();
     if (widget.cartItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -450,6 +451,8 @@ class _ShoppingCartState extends State<ShoppingCart> {
         'Time': selectedDate != null ? selectedDate!.toLocal().toString() : '',
         'Username': Provider.of<UserData>(context, listen: false).id ?? 'No ID',
         'Slip': '',
+        'status': 'Waiting for payment',
+        'CreateDate': now.toString(),
       }).then((value) {
         print("Order added successfully!");
       }).catchError((error) {

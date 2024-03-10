@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, deprecated_member_use, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, deprecated_member_use, use_build_context_synchronously, no_logic_in_create_state
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
