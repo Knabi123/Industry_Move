@@ -1,4 +1,4 @@
-// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_const_constructors, avoid_print, no_logic_in_create_state, non_constant_identifier_names
+// ignore_for_file: library_private_types_in_public_api, no_leading_underscores_for_local_identifiers, prefer_const_constructors, avoid_print, no_logic_in_create_state, non_constant_identifier_names, use_build_context_synchronously
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -40,14 +40,14 @@ class _MyOrderState extends State<OrderDetailPage> {
       await storageRef.putFile(_imageFile);
 
       // Get the download URL
-      final Slip = await storageRef.getDownloadURL();
+      final slipUrl = await storageRef.getDownloadURL();
 
       // Update Firestore document with the image URL
       await FirebaseFirestore.instance
           .collection('Order')
-          .doc('Fc4ynHcHzsQavBjPGm86')
+          .doc(widget.orderData.id)
           .update({
-        'Slip': Slip,
+        'Slip': slipUrl,
       });
     } else {
       print('No image selected.');
@@ -60,7 +60,7 @@ class _MyOrderState extends State<OrderDetailPage> {
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[300],
         elevation: 0,
-        title: Text('Order'),
+        title: Text('Order Detail'),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {},
@@ -86,13 +86,6 @@ class _MyOrderState extends State<OrderDetailPage> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 120.0),
-                  child: Text(
-                    'Order Detail',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
                 SizedBox(height: 20),
                 Text(
                   'รหัสออเดอร์ : ${orderData['OrderID']}',
