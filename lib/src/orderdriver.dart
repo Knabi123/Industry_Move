@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors, unused_import
+// ignore_for_file: use_key_in_widget_constructors, unused_import, avoid_print, deprecated_member_use, duplicate_ignore
 
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, library_private_types_in_public_api, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
 
@@ -28,7 +28,7 @@ class OrderList extends StatelessWidget {
           itemBuilder: (context, index) {
             final orderData = documents[index].data() as Map<String, dynamic>;
             final orderId = documents[index].id;
-
+            bool isFinished = orderData['status'] == 'Finished';
             return Card(
               margin: EdgeInsets.all(8),
               child: ListTile(
@@ -50,9 +50,35 @@ class OrderList extends StatelessWidget {
                 ),
                 trailing: ElevatedButton(
                   onPressed: () {
-                    print('เสร็จ สำหรับ Order ID: $orderId');
+                    if (!isFinished) {
+                      FirebaseFirestore.instance
+                          .collection('Order')
+                          .doc(orderId)
+                          .update({
+                        'status': 'Finished',
+                      }).then((_) {
+                        print(
+                            'อัปเดตค่า status เป็น Finished สำเร็จสำหรับ Order ID: $orderId');
+                      }).catchError((error) {
+                        print('เกิดข้อผิดพลาดในการอัปเดตค่า status: $error');
+                      });
+                    }
                   },
-                  child: Text('เสร็จ'),
+                  style: ElevatedButton.styleFrom(
+                    primary: isFinished
+                        ? Color.fromARGB(255, 181, 181, 181)
+                        : Color.fromARGB(255, 31, 229, 1),
+                  ),
+                  child: Text(
+                    isFinished ? 'จบงานแล้ว' : 'ส่งสินค้าสำเร็จ',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontSize: isFinished ? 16 : 16,
+                      color: isFinished
+                          ? const Color.fromARGB(255, 124, 123, 123)
+                          : Colors.white, // สีของฟอนท์
+                    ),
+                  ),
                 ),
               ),
             );
