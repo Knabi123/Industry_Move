@@ -152,9 +152,14 @@ class FirestoreService {
 
 class UserData extends ChangeNotifier {
   String? id;
-
+  String? name;
   void setId(String newId) {
     id = newId;
+    notifyListeners();
+  }
+
+  void setName(String newName) {
+    id = newName;
     notifyListeners();
   }
 }

@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, deprecated_member_use, use_build_context_synchronously, no_logic_in_create_state
+// ignore_for_file: prefer_const_constructors, deprecated_member_use, use_build_context_synchronously, no_logic_in_create_state, avoid_print
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:company/src/orderscreen.dart';
 import 'package:flutter/material.dart';
 
 class Orderdetail extends StatefulWidget {
@@ -13,20 +14,6 @@ class Orderdetail extends StatefulWidget {
 class _MyOrderState extends State<Orderdetail> {
   late Stream<QuerySnapshot> _orderStream;
   final DocumentSnapshot orderData;
-//   Future<String> getImageURL(String imageName) async {
-//   try {
-//     // ดึง URL ของรูปภาพจาก Firebase Storage
-//     String imageURL = await FirebaseStorage.instance
-//         .ref()
-//         .child('path/to/Slip/$imageName')
-//         .getDownloadURL();
-
-//     return imageURL;
-//   } catch (e) {
-//     print('Error getting image URL: $e');
-//     return ''; // หรือคืนค่าอื่นที่คุณต้องการให้เหมาะสม
-//   }
-// }
   _MyOrderState({required this.orderData});
   @override
   void initState() {
@@ -57,11 +44,13 @@ class _MyOrderState extends State<Orderdetail> {
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[300],
         elevation: 0,
-        title: Text('Order'),
+        title: Text('Order Detail'),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.menu),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back),
         ),
       ),
       body: Padding(
@@ -79,17 +68,14 @@ class _MyOrderState extends State<Orderdetail> {
 
             // Assuming you have only one document in the 'Order' collection
             var orderData = widget.orderData;
+            bool hasSlip = orderData['Slip'] != '';
+            bool isFinished = orderData['status'] == 'Finished';
+            bool isCurrentlyShipping =
+                orderData['status'] == 'Currently shipping';
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(left: 120.0),
-                  child: Text(
-                    'Order Detail',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
                 SizedBox(height: 20),
                 Text(
                   'รหัสออเดอร์ : ${orderData['OrderID']}',
@@ -159,10 +145,9 @@ class _MyOrderState extends State<Orderdetail> {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                         (Set<MaterialState> states) {
                       if (orderData['Slip'] != '') {
-                        return Color.fromARGB(
-                            255, 255, 255, 255); // ถ้ามี 'Slip' ให้ใช้สีขาว
+                        return Color.fromARGB(255, 255, 255, 255);
                       } else {
-                        return Colors.redAccent; // ถ้าไม่มี 'Slip' ให้ใช้สีแดง
+                        return Colors.redAccent;
                       }
                     }),
                     // Add padding to the button's icon
@@ -171,14 +156,14 @@ class _MyOrderState extends State<Orderdetail> {
                   ),
                   label: orderData['Slip'] != ''
                       ? Text('Click to view payment')
-                      : Text('No Payment'), // ปรับแสดงข้อความของปุ่ม
+                      : Text('No Payment'),
                   icon: Icon(Icons.image),
                   onPressed: orderData['Slip'] != ''
                       ? () async {
                           String imageURL = await orderData['Slip'];
                           _showImagePopup(context, imageURL);
                         }
-                      : null, // ปรับให้ปุ่มไม่สามารถกดได้เมื่อไม่มี 'Slip'
+                      : null,
                 ),
                 SizedBox(height: 15),
                 Text(
@@ -196,7 +181,58 @@ class _MyOrderState extends State<Orderdetail> {
                         decoration: TextDecoration.none,
                         color: Colors.deepOrangeAccent),
                   ),
-                )
+                ),
+                SizedBox(height: 30),
+                Expanded(
+                    child: Center(
+                  child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      minimumSize: MaterialStateProperty.all(Size(300, 60)),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                          if (!hasSlip) {
+                            return const Color.fromARGB(255, 254, 0, 0);
+                          } else if (isFinished || isCurrentlyShipping) {
+                            return Color.fromARGB(202, 218, 214, 214);
+                          } else {
+                            return Color.fromARGB(255, 185, 133, 198);
+                          }
+                        },
+                      ),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          side: BorderSide.none, // ไม่มีเส้นขอบ
+                        ),
+                      ),
+                      elevation: MaterialStateProperty.all<double>(
+                          4), // เพิ่มความสูงของปุ่ม
+                      shadowColor: MaterialStateProperty.all<Color>(
+                        Colors.black.withOpacity(0.8), // สีเงา
+                      ),
+                    ),
+                    label: hasSlip
+                        ? Text(
+                            'Select Driver',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(
+                            'No Payment',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                    icon: Icon(Icons.local_shipping),
+                    onPressed: (isFinished || isCurrentlyShipping)
+                        ? null
+                        : (hasSlip
+                            ? () => _selectDriver(context, orderData: orderData)
+                            : () =>
+                                _selectDriver(context, orderData: orderData)),
+                  ),
+                ))
               ],
             );
           },
@@ -205,4 +241,144 @@ class _MyOrderState extends State<Orderdetail> {
       backgroundColor: Colors.deepPurple[100],
     );
   }
+}
+
+void _selectDriver(BuildContext context,
+    {required DocumentSnapshot orderData}) {
+  Navigator.of(context).push(
+    MaterialPageRoute<void>(
+      builder: (BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Center(child: Text('Select Driver')),
+            elevation: 2,
+            bottom: PreferredSize(
+              preferredSize: Size.fromHeight(2.0),
+              child: Container(
+                color: const Color.fromARGB(255, 0, 0, 0),
+                height: 2.0,
+              ),
+            ),
+          ),
+          body: StreamBuilder<QuerySnapshot>(
+            stream:
+                FirebaseFirestore.instance.collection('drivers').snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              var driverDocs = snapshot.data?.docs ?? [];
+              return ListView.builder(
+                itemCount: driverDocs.length,
+                itemBuilder: (context, index) {
+                  var driverData =
+                      driverDocs[index].data() as Map<String, dynamic>;
+                  var imageUrl = driverData['imageUrl'] ?? '';
+                  var name = driverData['name'] ?? '';
+                  var carId = driverData['carid'] ?? '';
+                  var licensePlate = driverData['licensePlate'] ?? '';
+                  return Card(
+                    margin:
+                        EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    elevation: 2,
+                    child: ListTile(
+                      leading: imageUrl.isNotEmpty
+                          ? Image.network(imageUrl)
+                          : Icon(Icons.person),
+                      title: Text(name),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Car ID: $carId'),
+                          Text('License Plate: $licensePlate'),
+                        ],
+                      ),
+                      onTap: () {
+                        String driverId = driverData['driverId'];
+                        _confirmDriverSelection(context, name, driverId,
+                            orderData: orderData);
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        );
+      },
+    ),
+  );
+}
+
+void _confirmDriverSelection(
+    BuildContext context, String driverName, String driverId,
+    {required DocumentSnapshot orderData}) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Center(
+            child: Text('Confirmation',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Select $driverName as the driver to delivery Order No.${orderData['OrderID']}?',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              FirebaseFirestore.instance
+                  .collection('Order')
+                  .doc(orderData.id)
+                  .update({
+                'status': 'Currently shipping',
+                'ResponsibleDriver': driverName,
+                'ResponsibleDriverId': driverId,
+              }).then((_) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => OrderScreen()),
+                );
+              }).catchError((error) {
+                print('Error updating order status: $error');
+              });
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.green,
+            ),
+            child: Text(
+              'Yes',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.red,
+            ),
+            child: Text(
+              'No',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -2,16 +2,22 @@
 
 // ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, library_private_types_in_public_api, avoid_unnecessary_containers, prefer_const_literals_to_create_immutables
 
-import 'package:company/src/orderlist.dart';
+import 'package:company/firestore_service.dart';
 import 'package:company/src_user/login.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class OrderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('Order').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('Order')
+          .where('ResponsibleDriverId',
+              isEqualTo:
+                  Provider.of<UserData>(context, listen: false).id ?? 'No ID')
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
@@ -31,7 +37,18 @@ class OrderList extends StatelessWidget {
             bool isFinished = orderData['status'] == 'Finished';
             return Card(
               margin: EdgeInsets.all(8),
+              elevation: 4, // เพิ่มความสูงของ Card
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(15), // ปรับขอบมนเพื่อให้มีมิติ
+                side: BorderSide(
+                  color: Colors.grey, // สีขอบเส้น
+                  width: 1, // ความหนาของเส้น
+                ),
+              ),
               child: ListTile(
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 8, horizontal: 16), // เพิ่ม padding ใน ListTile
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -45,7 +62,7 @@ class OrderList extends StatelessWidget {
                     Text('ชื่อสินค้า: ${orderData['ProductName']}'),
                     Text('สถานที่ส่ง: ${orderData['Location']}'),
                     Text('ราคา: ${orderData['Price']}'),
-                    Text('จํานวณ: ${orderData['Amount']}'),
+                    Text('จำนวณ: ${orderData['Amount']}'),
                   ],
                 ),
                 trailing: ElevatedButton(
@@ -76,7 +93,7 @@ class OrderList extends StatelessWidget {
                       fontSize: isFinished ? 16 : 16,
                       color: isFinished
                           ? const Color.fromARGB(255, 124, 123, 123)
-                          : Colors.white, // สีของฟอนท์
+                          : Colors.white,
                     ),
                   ),
                 ),
@@ -105,6 +122,7 @@ class _DriverOrderScreenState extends State<DriverOrderScreen> {
           'Order Driver',
           style: TextStyle(
             fontSize: 24,
+            color: Colors.white,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.5,
           ),
@@ -117,10 +135,13 @@ class _DriverOrderScreenState extends State<DriverOrderScreen> {
           child: ListView(
             children: [
               DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.deepPurple[300],
+                ),
                 child: Center(
                   child: Text(
                     'L O G O',
-                    style: TextStyle(fontSize: 35),
+                    style: TextStyle(fontSize: 35, color: Colors.white),
                   ),
                 ),
               ),
@@ -140,8 +161,12 @@ class _DriverOrderScreenState extends State<DriverOrderScreen> {
           ),
         ),
       ),
-      body: Center(
-        child: OrderList(),
+      body: Container(
+        color: const Color.fromARGB(255, 244, 244, 244),
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: OrderList(),
+        ),
       ),
     );
   }

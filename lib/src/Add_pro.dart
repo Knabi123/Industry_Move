@@ -91,50 +91,82 @@ class _Add_ProState extends State<Add_Pro> {
     if (documentSnapshot != null) {
       _TypeController.text = documentSnapshot['Type'];
     }
+
     await showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext ctx) {
-          return Padding(
-            padding: EdgeInsets.only(
-                top: 20,
-                right: 20,
-                left: 20,
-                bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Center(
-                  child: Text(
-                    "Update",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      isScrollControlled: true,
+      context: context,
+      builder: (BuildContext ctx) {
+        return Padding(
+          padding: EdgeInsets.only(
+            top: 20,
+            right: 20,
+            left: 20,
+            bottom: MediaQuery.of(ctx).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Text(
+                  "Update",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(height: 20),
+              TextField(
+                controller: _TypeController,
+                decoration: InputDecoration(
+                  labelText: "Type",
+                  hintText: "Add Type",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                      color: Colors.black, // สีเส้นขอบดำเข้ม
+                    ),
+                  ),
+                  filled: true, // เติมสีพื้นหลัง
+                  fillColor:
+                      const Color.fromARGB(255, 255, 255, 255), // สีพื้นหลัง
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () async {
+                  final String Type = _TypeController.text;
+                  if (Type != null) {
+                    await _Addtype.doc(documentSnapshot!.id)
+                        .update({"Type": Type});
+                    _TypeController.text = '';
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: Text(
+                  "Update",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: const Color.fromARGB(255, 255, 255, 255),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextField(
-                  controller: _TypeController,
-                  decoration: const InputDecoration(
-                      labelText: "Type", hintText: "Add Type"),
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(
+                      255, 174, 131, 230), // เปลี่ยนสีพื้นหลังของปุ่ม
+                  elevation: 4, // เพิ่มความสูงของปุ่ม
+                  shadowColor: Colors.black.withOpacity(0.5), // สีของเงา
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    side: BorderSide(
+                      color: Colors.black, // สีเส้นขอบดำเข้ม
+                    ),
+                  ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                ElevatedButton(
-                    onPressed: () async {
-                      final String Type = _TypeController.text;
-                      if (Type != null) {
-                        await _Addtype.doc(documentSnapshot!.id)
-                            .update({"Type": Type});
-                        _TypeController.text = '';
-
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: const Text("Update"))
-              ],
-            ),
-          );
-        });
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _delete(String TypeID) async {

@@ -31,9 +31,9 @@ class OrderList extends StatelessWidget {
                 title: Text(
                   'OrderID: ${order['OrderID'] ?? ''}',
                   style: const TextStyle(
-                    fontSize: 18, // ตั้งค่าขนาดตัวอักษร OrderID
+                    fontSize: 18,
                     color: Colors.deepPurple,
-                    fontWeight: FontWeight.bold, // ตั้งค่าสีของตัวอักษร
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 subtitle: Column(
