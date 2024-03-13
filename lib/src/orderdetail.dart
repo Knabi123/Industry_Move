@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, deprecated_member_use, use_build_context_synchronously, no_logic_in_create_state, avoid_print
+// ignore_for_file: prefer_const_constructors, deprecated_member_use, use_build_context_synchronously, no_logic_in_create_state, avoid_print, unused_import
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:company/src/bottombar.dart';
 import 'package:company/src/orderscreen.dart';
 import 'package:flutter/material.dart';
 
@@ -345,7 +346,7 @@ void _confirmDriverSelection(
                 'ResponsibleDriverId': driverId,
               }).then((_) {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => OrderScreen()),
+                  MaterialPageRoute(builder: (context) => BottomBar()),
                 );
               }).catchError((error) {
                 print('Error updating order status: $error');

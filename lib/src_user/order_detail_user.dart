@@ -63,8 +63,10 @@ class _MyOrderState extends State<OrderDetailPage> {
         title: Text('Order Detail'),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.menu),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back),
         ),
       ),
       body: Padding(
