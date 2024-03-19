@@ -134,14 +134,14 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 20,
                   ),
-                  Center(
-                    child: Text(
-                      "Forgot Password?",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
+                  // Center(
+                  //   child: Text(
+                  //     "Forgot Password?",
+                  //     style: TextStyle(color: Colors.black),
+                  //   ),
+                  // ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   Center(
                     child: ElevatedButton(
@@ -216,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 20),
+                      SizedBox(width: 30),
                       GestureDetector(
                           onTap: () async {
                             try {
@@ -258,18 +258,18 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           )),
                       SizedBox(width: 20),
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.white54,
-                        ),
-                        child: Image.asset(
-                          'assets/images/instagram.png',
-                          height: 40,
-                        ),
-                      ),
+                      // Container(
+                      //   padding: EdgeInsets.all(5),
+                      //   decoration: BoxDecoration(
+                      //     border: Border.all(color: Colors.grey.shade300),
+                      //     borderRadius: BorderRadius.circular(20),
+                      //     color: Colors.white54,
+                      //   ),
+                      //   child: Image.asset(
+                      //     'assets/images/instagram.png',
+                      //     height: 40,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ],
